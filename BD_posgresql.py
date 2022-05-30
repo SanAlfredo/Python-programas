@@ -11,6 +11,22 @@ import Clases
 #endregion
 from PyQt5.QtWidgets import QMessageBox
 class Posgress():
+    def Crear_admin(self):
+        conn=""
+        try:
+            conn = psycopg2.connect(
+                host=Clases.Metodos.Obtener_datos('HOST'),
+                port=Clases.Metodos.Obtener_datos('PORT'),
+                user=Clases.Metodos.Obtener_datos('USER2'),
+                password=Clases.Metodos.Obtener_datos('PASSWORD2')
+            )
+            cursor=conn.cursor()
+        except:
+            QMessageBox.critical(self,"Mensaje de error","No se pudo crear al super usuario")
+        finally:
+            if conn!="":
+                cursor.close()
+                conn.close()
     #region Crear tablas en la BBDD postgres
     def Crear_tabla(self):
         try:

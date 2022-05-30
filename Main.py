@@ -25,29 +25,23 @@ class SplashScreen(QDialog):
         #self.Crear_llave()
         ## UI ==> Codigos de la interface
         ########################################################################
-
         ## quitando barra de titulos
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-
         ## Iniciando el Qtimer
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.progress)
         # Tiempo en milisegundos
         self.timer.start(35)
-
         # Texto inicial
         self.ui.texto.setText("Iniciando el Programa...")
-
         # Textos cambiantes durante la barra de progreso
         QtCore.QTimer.singleShot(3000, lambda: self.ui.texto.setText("Cargando Archivos..."))
         QtCore.QTimer.singleShot(4500, lambda: self.ui.texto.setText("Carga finalizada..."))
-
         ## Activando la ventana de inicio
         ########################################################################
         self.show()
         ## ==> END ##
-
     ## ==> Funciones de la aplicacion
     ########################################################################
     #region funcion para la barra de progreso
@@ -67,27 +61,15 @@ class SplashScreen(QDialog):
             self.main.show()
             # Cerrar la ventana de inicio
             self.close()
-
         # aumentamos el contador
         counter += 1
     #endregion
-    '''
-    #region crear la llave que se usará para encriptar
-    def Crear_llave(self):
-        key=Fernet.generate_key()
-        if not os.path.exists('dato.kydat'):
-            file=open('dato.kydat','wb')
-            file.write(key)
-            file.close()
-    #endregion
-    '''
 #definir funcion para evitar errores con qt
 def eliminar_Qt_warning():
     environ["QT_DEVICE_PIXEL_RATIO"]="0"
     environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
     environ["QT_SCREEN_SCALE_FACTORS"] = "1"
     environ["QT_SCALE_FACTOR"] = "1"
-
 ### ::::::::::: damos inicio a la aplicacion
 if __name__ == "__main__":
     eliminar_Qt_warning()

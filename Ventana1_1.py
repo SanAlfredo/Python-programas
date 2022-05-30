@@ -84,4 +84,3 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Bienvenido"))
         self.label.setText(_translate("Dialog", "<html><head/><body><p align=\"center\"><span style=\" font-weight:600;\">BIENVENIDO AL SISTEMA DE INFORMACIÓN</span></p><p align=\"center\"><span style=\" font-weight:600;\">DE HISTORIALES CLÍNICOS PEDIÁTRICOS</span></p><p align=\"center\"><span style=\" font-weight:600;\">&quot;CONSULTORIO PEDIÁTRICO DIVINO NIÑO JESÚS&quot;</span></p></body></html>"))
-
