@@ -91,15 +91,11 @@ class Metodos():
         '''
         diccionario={"MAIL":"gAAAAABhZbTRQfzc5FLvzwqgSWuzh2_A5N_lAPeuyH89bVc0bXiVlwRqQCOwwhNAjAOCph_swU6PC6_wBrPSRvI8_uJR8YZ3nI3rMkQh2YnlBLg03c7LKTZ6BV1F-adZzPnXqSLOCZbD",
                      "MAIL_PASS":"gAAAAABhZ1QfT0YfPODX428LEFwLZULT9wDBAx7sFVfgZVYJGy7xzXJlTdyu153ESMv612X9rWwJthcMmfOz8ieJnq2hMdQB5_goSI4l_QMPgP-VD-X5MNY=",
-                     "HOST":"gAAAAABhZbWPeJe1PKJMiwCF37DGUA6xp-5Ux_ZE7bl6YdMtSFHdU2pmHJNiiCdRegH8-0CSH36x9j9txzSw3byT0WABCqiQeQ==",
-                     "HOST2":"gAAAAABhpMXplU9X5hqAoBRbnpm1srygBiOy172bibRBWejbSvHYhh33hOScVSPVHkJNKh1bIehEi5yb_z3zgz-IvE9qwowGCQ==",
+                     "HOST":"gAAAAABhpMXplU9X5hqAoBRbnpm1srygBiOy172bibRBWejbSvHYhh33hOScVSPVHkJNKh1bIehEi5yb_z3zgz-IvE9qwowGCQ==",
                      "DATABASE":"gAAAAABhZbWuTaUjm3R-xyTLkD1nN4yCChpJHF-hop45vmxLzqEEvUsoM5AsFE2CcgJ4IuKwd5o2xTSNgQ0-c0sCoopFqPOzew==",
-                     "DATABASE2":"gAAAAABhpMYFbLCJw2WGRTpEAWm62Mcg6Jq4495H1zj4p2POou0vK5QLrqcSc9lN52caPMjORqaSmgAf2yLvdlT_w2Ehm223JQ==",
                      "PORT":"gAAAAABhZbXRW37jr0Lbh6uy8uSNL2OY9tbmmLCt49ouJMGc_2UJA2qK7zx1DOYoxF-k3KGOXkiGgmXIJHPshqZZQO9VGDSJ2A==",
                      "USER":"gAAAAABhZbYQINDcn_cQi1WgBgKD6D0ZZFINwO2EJA982RkFa1vt2QbzkHIHD-kqYXWUdu8y48ibjpsqZXJbCzba77UsXeGcZw==",
-                     "PASSWORD":"gAAAAABhZbYxvgfaX3avSJqHVa1Jtlh_Opccl8JRoXJgYlQKPypeB2dQsysOD6cOMzqVbft7pQ4pd_UzQT0q_DYRDsXFjRMKXw==",
-                     "USER1":"gAAAAABhpMUO9KyZ1Wl9E-SqXUKptT2ihYlF-PxAZRYbxUF4-f7d_AHGhLp8OmJeSb1zWcD09UsAtXHsvc_MyPL_LAoPLCJTrA==",
-                     "PASSWORD2":"gAAAAABhpMUoRhRduihu2niaH-PUhNv46I02jglBarJUT1CngQ6-vIAwk01pmF8xR2V7R9oFiSmdmCPvHZSm8ji3Ih_bLDldHw=="}
+                     "PASSWORD":"gAAAAABhZbYxvgfaX3avSJqHVa1Jtlh_Opccl8JRoXJgYlQKPypeB2dQsysOD6cOMzqVbft7pQ4pd_UzQT0q_DYRDsXFjRMKXw=="}
         dato1=diccionario[seccion]
         dato=Metodos.Desencriptador(1,dato1)
         return dato
