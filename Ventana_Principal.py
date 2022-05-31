@@ -312,7 +312,7 @@ class Principal(QMainWindow):
     # -----------------------------------------------------------------------------------------
     # ------------------------------------------------------------------------------------------
     # entrando a las ventanas
-    # abrir ventana de logeo
+    #region abrir ventana de logeo
     def Ventana_login(self):
         """
         entrar a la ventana de logeo
@@ -322,8 +322,8 @@ class Principal(QMainWindow):
         self.ui.Stacked_main.setCurrentIndex(1)
         self.ui.txt_log_user.setFocus()
         self.les = [self.ui.txt_log_user, self.ui.txt_log_pass, self.ui.btn_log_iniciar]
-
-    # Ventana de registro
+    #endregion
+    #region Ventana de registro
     def Ventana_registro(self):
         """
         Entrar a la ventana de registro de nuevo usuario
@@ -353,15 +353,15 @@ class Principal(QMainWindow):
         self.les = [self.ui.txt_reg_user_CI, self.ui.cb_reg_user_CI, self.ui.txt_reg_user_mat, self.ui.txt_reg_nom_user,
                         self.ui.txt_reg_apell1_user, self.ui.txt_reg_apell2_user, self.ui.txt_reg_pass, self.ui.txt_reg_pass1,
                         self.ui.txt_reg_correo_user, self.ui.comboBox, self.ui.btn_reg_nuevo_user]
-
-    # Ventana de recuperación de contraseña
+    #endregion
+    #region Ventana de recuperación de contraseña
     def Ventana_recu(self):
         self.Limpia_recu()
         self.ui.Stacked_main.setCurrentIndex(3)
         self.ui.txt_recu_user.setFocus()
         self.les = [self.ui.txt_recu_user, self.ui.txt_recu_correo, self.ui.btn_recu_codigo]
-
-    # Ventana de registro de paciente
+    #endregion
+    #region Ventana de registro de paciente
     def Ventana_reg_pac(self, num):
         global tema
         global reg_pac
@@ -383,17 +383,22 @@ class Principal(QMainWindow):
                     self.ui.txt_reg_pac_madre1, self.ui.txt_reg_pac_madre2,self.ui.txt_reg_pac_CI_madre,self.ui.cb_reg_pac_CI_madre,
                     self.ui.txt_reg_pac_tel2,self.ui.btn_reg_pac_save]
         self.ui.Stacked_main.setCurrentIndex(6)
-
-    # modificar datos de usuario
+    #endregion
+    #region modificar datos de usuario
     def Ventana_modifica(self):
         global tema
         self.Poner_tema(tema)
         global reg_us
         reg_us = 2
         self.Ventana_registro()
-
-    # Ventana para registro de historias, buscar su historia primero
+    #endregion
+    #region Ventana para registro de historias, buscar su historia primero
     def Ventana_reg_hist(self, num):
+        '''
+        Esta parte del código se encuentra dentro del Stackmain 7 que es un cuadro
+        de búsqueda de nombres para encontrar historias, sirve para modificar al
+        paciente o para registrar una nueva consulta seleccionando el nombre en la tabla
+        '''
         global tema
         self.Poner_tema(tema)
         global x
@@ -406,7 +411,7 @@ class Principal(QMainWindow):
         self.ui.txt_hist_pac_nom.setFocus()
         self.les = [self.ui.txt_hist_pac_nom, self.ui.txt_hist_pac_app1, self.ui.txt_hist_pac_app2,
                     self.ui.btn_hist_pac_buscar]
-
+    #endregion
     # ventana para registro de historias despues de buscar o registrar, se puede ingresar por 2 caminos
     def Ventana_reg_hist2(self, datos):
         global tema

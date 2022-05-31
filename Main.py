@@ -10,8 +10,6 @@ from Ventana1_1 import Ui_Dialog
 # importar la ventana 2
 from Ventana_Principal import Principal
 #from cryptography.fernet import Fernet
-# importar la base de datos
-#import BD_posgresql
 ## ==> variables globales
 counter = 0
 # ventana de inicio
@@ -20,8 +18,6 @@ class SplashScreen(QDialog):
         QDialog.__init__(self)
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
-        #creando tablas si no existen
-        #BD_posgresql.Posgress.Crear_tabla(self)
         #self.Crear_llave()
         ## UI ==> Codigos de la interface
         ########################################################################
