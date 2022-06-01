@@ -19185,7 +19185,8 @@ class Principal(QMainWindow):
                 query = sql.SQL("select  f.fechayhora,p.nombre,p.apellido1,p.apellido2,historial.id_tabla,historial.tabla,"
                                 "d.descripcion,m.matricula from historial inner join fecha f on f.id_fecha = historial.fecha "
                                 "inner join medico m on m.matricula = historial.medico inner join descripciones d on d.id_descripcion = historial.descripciones "
-                                "inner join persona p on p.id_persona = m.id_persona where fechayhora> now()- interval {buscado}").format(
+                                "inner join persona p on p.id_persona = m.id_persona where fechayhora> now()- interval {buscado} order by "
+                                "f.fechayhora desc").format(
                     buscado=sql.Placeholder()
                 )
                 cursor.execute(query, (dato,))
@@ -19197,7 +19198,8 @@ class Principal(QMainWindow):
                 query = sql.SQL("select  f.fechayhora,p.nombre,p.apellido1,p.apellido2,historial.id_tabla,historial.tabla,"
                                 "d.descripcion,m.matricula from historial inner join fecha f on f.id_fecha = historial.fecha "
                                 "inner join medico m on m.matricula = historial.medico inner join descripciones d on d.id_descripcion = historial.descripciones "
-                                "inner join persona p on p.id_persona = m.id_persona where m.matricula= {matri} and fechayhora> now()- interval {buscado}").format(
+                                "inner join persona p on p.id_persona = m.id_persona where m.matricula= {matri} and fechayhora> now()- interval {buscado} "
+                                "order by f.fechayhora desc").format(
                     matri=sql.Placeholder(),
                     buscado=sql.Placeholder()
                 )
