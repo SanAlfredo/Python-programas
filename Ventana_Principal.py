@@ -18855,16 +18855,6 @@ class Principal(QMainWindow):
             else:
                 user=""
                 valid=0
-            '''cursor.execute('SELECT * FROM busqueda_user(%s,%s,%s)',(tupla[1],tupla[2],tupla[3],))
-            resultado=cursor.fetchall()
-            for i in resultado:
-                for j in i:
-                    user=j
-            cursor.execute('SELECT * FROM validacion(%s)',(user,))
-            resultado=cursor.fetchall()
-            for i in resultado:
-                for j in i:
-                    valid=int(j)'''
             if caso==1:
                 cursor.execute('SELECT * FROM habil(%s)',(valid,))
                 query = sql.SQL("ALTER USER {username} LOGIN").format(
