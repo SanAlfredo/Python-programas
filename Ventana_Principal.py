@@ -412,7 +412,7 @@ class Principal(QMainWindow):
         self.les = [self.ui.txt_hist_pac_nom, self.ui.txt_hist_pac_app1, self.ui.txt_hist_pac_app2,
                     self.ui.btn_hist_pac_buscar]
     #endregion
-    # ventana para registro de historias despues de buscar o registrar, se puede ingresar por 2 caminos
+    #region ventana para registro de historias despues de buscar o registrar, se puede ingresar por 2 caminos
     def Ventana_reg_hist2(self, datos):
         global tema
         self.Poner_tema(tema)
@@ -429,7 +429,7 @@ class Principal(QMainWindow):
                     self.ui.tab_fecha_hora, self.ui.btn_hist_pac_edad, self.ui.txt_hist_pac_pes,
                     self.ui.txt_hist_pac_tall,
                     self.ui.btn_hist_pac_IMC, self.ui.pt_hist_pac_con, self.ui.btn_hist_pac_save]
-
+    #endregion
     #region modulo que controla el registro de historias clinicas
     def Ventana_nueva_hist(self):
         global reg_pac
@@ -796,7 +796,7 @@ class Principal(QMainWindow):
                                                                 # endregion
                                                                 if tel_padre:
                                                                     tabla = "telefono"
-                                                                    columnas = "id_telefono,numero,id_familiar"
+                                                                    columnas = "id_telefono,numero,familiar"
                                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                     valores = [id_tel, tel_padre, id_familiar]
                                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -926,7 +926,7 @@ class Principal(QMainWindow):
                                                                 # endregion
                                                                 if tel_madre:
                                                                     tabla = "telefono"
-                                                                    columnas = "id_telefono,numero,id_familiar"
+                                                                    columnas = "id_telefono,numero,familiar"
                                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                     valores = [id_tel, tel_madre, id_familiar]
                                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -1193,6 +1193,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -1241,6 +1243,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -1340,7 +1344,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -1360,8 +1364,8 @@ class Principal(QMainWindow):
                                                                         if hist1 == 1:
                                                                             pass
                                                                     # endregion
-                                                            else:
-                                                                QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
+                                                                else:
+                                                                    QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
                                                             QMessageBox.critical(self, "Mensaje de error", "No se pudo registrar al familiar")
                                                     else:
@@ -1396,7 +1400,7 @@ class Principal(QMainWindow):
                                                         pass
                                                 # endregion
                                                 if ci_padre:
-                                                    if e==0:
+                                                    if e == 0:
                                                         tabla = "carnet"
                                                         columnas = "id_carnet,numero,extension,persona"
                                                         id_ci = self.Conseguir_id_tabla(1, "id_carnet", tabla)
@@ -1418,6 +1422,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -1441,10 +1447,12 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
+                                                            else:
+                                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar el carnet del padre")
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -1468,11 +1476,11 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
-                                                                # region registro en la tabla historial
+                                                                #region registro en la tabla historial
                                                                 tabla = "fecha"
                                                                 columnas = "id_fecha,fechayhora,tipo_fecha"
                                                                 id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
@@ -1486,7 +1494,7 @@ class Principal(QMainWindow):
                                                                     hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
                                                                     if hist1 == 1:
                                                                         pass
-                                                            # endregion
+                                                                #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -1511,6 +1519,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -1534,10 +1544,12 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar el carnet del padre")
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -1561,11 +1573,11 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
-                                                            # region registro en la tabla historial
+                                                            #region registro en la tabla historial
                                                             tabla = "fecha"
                                                             columnas = "id_fecha,fechayhora,tipo_fecha"
                                                             id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
@@ -1579,7 +1591,7 @@ class Principal(QMainWindow):
                                                                 hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
                                                                 if hist1 == 1:
                                                                     pass
-                                                        # endregion
+                                                            #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -1679,7 +1691,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -1783,7 +1795,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -1807,7 +1819,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -1876,7 +1888,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -1900,7 +1912,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -1980,6 +1992,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -2028,6 +2042,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -2127,7 +2143,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -2205,6 +2221,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -2228,10 +2246,12 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
+                                                            else:
+                                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar el carnet del padre")
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -2255,7 +2275,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -2298,6 +2318,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -2321,10 +2343,12 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar el carnet del padre")
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -2348,7 +2372,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -2466,7 +2490,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -2570,7 +2594,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -2594,7 +2618,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -2663,7 +2687,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -2687,7 +2711,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -2791,6 +2815,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -2839,6 +2865,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -2938,7 +2966,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -3016,6 +3044,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -3039,10 +3069,12 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
+                                                            else:
+                                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar el carnet del padre")
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -3066,7 +3098,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -3109,6 +3141,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -3132,10 +3166,12 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar el carnet del padre")
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -3159,7 +3195,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -3277,7 +3313,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -3381,7 +3417,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -3405,7 +3441,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -3474,7 +3510,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -3498,7 +3534,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -3578,6 +3614,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -3626,6 +3664,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -3725,7 +3765,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -3803,6 +3843,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -3826,10 +3868,12 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
+                                                            else:
+                                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar el carnet del padre")
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -3853,7 +3897,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -3896,6 +3940,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -3919,10 +3965,12 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar el carnet del padre")
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -3946,7 +3994,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -4064,7 +4112,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -4168,7 +4216,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -4192,7 +4240,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -4261,7 +4309,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -4285,7 +4333,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -4413,6 +4461,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -4461,6 +4511,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -4560,7 +4612,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -4638,6 +4690,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -4661,10 +4715,12 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
+                                                            else:
+                                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar el carnet del padre")
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -4688,7 +4744,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -4731,6 +4787,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -4754,10 +4812,12 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar el carnet del padre")
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -4781,7 +4841,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -4899,7 +4959,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -5003,7 +5063,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -5027,7 +5087,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -5096,7 +5156,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -5120,7 +5180,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -5200,6 +5260,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -5248,6 +5310,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -5347,7 +5411,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -5425,6 +5489,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -5448,10 +5514,12 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
+                                                            else:
+                                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar el carnet del padre")
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -5475,7 +5543,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -5518,6 +5586,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -5544,7 +5614,7 @@ class Principal(QMainWindow):
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -5568,7 +5638,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -5686,7 +5756,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -5790,7 +5860,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -5814,7 +5884,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -5883,7 +5953,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -5907,7 +5977,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -6011,6 +6081,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -6059,6 +6131,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -6158,7 +6232,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -6236,6 +6310,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -6262,7 +6338,7 @@ class Principal(QMainWindow):
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -6286,7 +6362,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -6329,6 +6405,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -6355,7 +6433,7 @@ class Principal(QMainWindow):
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -6379,7 +6457,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -6497,7 +6575,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -6601,7 +6679,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -6625,7 +6703,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -6694,7 +6772,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -6718,7 +6796,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -6798,6 +6876,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -6846,6 +6926,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -6945,7 +7027,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -7023,6 +7105,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -7049,7 +7133,7 @@ class Principal(QMainWindow):
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -7073,7 +7157,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -7116,6 +7200,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -7142,7 +7228,7 @@ class Principal(QMainWindow):
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -7166,7 +7252,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -7284,7 +7370,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -7388,7 +7474,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -7412,7 +7498,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -7481,7 +7567,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -7505,7 +7591,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -7658,6 +7744,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -7706,6 +7794,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -7805,7 +7895,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -7883,6 +7973,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -7909,7 +8001,7 @@ class Principal(QMainWindow):
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -7933,7 +8025,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -7976,6 +8068,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -8002,7 +8096,7 @@ class Principal(QMainWindow):
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -8026,7 +8120,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -8144,7 +8238,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -8248,7 +8342,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -8272,7 +8366,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -8341,7 +8435,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -8365,7 +8459,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -8445,6 +8539,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -8493,6 +8589,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -8592,7 +8690,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -8670,6 +8768,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -8696,7 +8796,7 @@ class Principal(QMainWindow):
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -8720,7 +8820,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -8763,6 +8863,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -8789,7 +8891,7 @@ class Principal(QMainWindow):
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -8813,7 +8915,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -8931,7 +9033,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -9035,7 +9137,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -9059,7 +9161,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -9128,7 +9230,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -9152,7 +9254,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -9256,6 +9358,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -9304,6 +9408,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -9403,7 +9509,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -9481,6 +9587,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -9507,7 +9615,7 @@ class Principal(QMainWindow):
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -9531,7 +9639,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -9574,6 +9682,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -9600,7 +9710,7 @@ class Principal(QMainWindow):
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -9624,7 +9734,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -9742,7 +9852,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -9846,7 +9956,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -9870,7 +9980,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -9939,7 +10049,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -9963,7 +10073,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -10043,6 +10153,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -10091,6 +10203,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -10190,7 +10304,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -10268,6 +10382,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -10294,7 +10410,7 @@ class Principal(QMainWindow):
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -10318,7 +10434,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -10361,6 +10477,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -10387,7 +10505,7 @@ class Principal(QMainWindow):
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -10411,7 +10529,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -10529,7 +10647,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -10633,7 +10751,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -10657,7 +10775,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -10726,7 +10844,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -10750,7 +10868,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -10878,6 +10996,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -10926,6 +11046,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -11025,7 +11147,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -11103,6 +11225,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -11129,7 +11253,7 @@ class Principal(QMainWindow):
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -11153,7 +11277,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -11196,6 +11320,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -11222,7 +11348,7 @@ class Principal(QMainWindow):
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -11246,7 +11372,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -11364,7 +11490,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -11468,7 +11594,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -11492,7 +11618,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -11561,7 +11687,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -11585,7 +11711,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -11665,6 +11791,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -11713,6 +11841,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -11812,7 +11942,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -11890,6 +12020,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -11916,7 +12048,7 @@ class Principal(QMainWindow):
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -11940,7 +12072,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -11983,6 +12115,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -12009,7 +12143,7 @@ class Principal(QMainWindow):
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -12033,7 +12167,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -12151,7 +12285,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -12255,7 +12389,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -12279,7 +12413,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -12348,7 +12482,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -12372,7 +12506,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -12478,6 +12612,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -12526,6 +12662,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -12625,7 +12763,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -12703,6 +12841,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -12729,7 +12869,7 @@ class Principal(QMainWindow):
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -12753,7 +12893,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -12796,6 +12936,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -12822,7 +12964,7 @@ class Principal(QMainWindow):
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -12846,7 +12988,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -12964,7 +13106,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -13068,7 +13210,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -13092,7 +13234,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -13161,7 +13303,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -13185,7 +13327,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -13265,6 +13407,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet del paciente")
                                 if r==1:
                                     if b==0:
                                         tabla = "antecedentes"
@@ -13313,6 +13457,8 @@ class Principal(QMainWindow):
                                                     if hist1 == 1:
                                                         pass
                                                 # endregion
+                                            else:
+                                                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar los antecedentes del paciente")
                                 if nom_padre:
                                     if c==0:
                                         tabla = "fecha"
@@ -13412,7 +13558,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_padre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_padre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -13490,6 +13636,8 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
+                                                        else:
+                                                            QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                     else:
                                                         if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                             tabla = "carnet"
@@ -13516,7 +13664,7 @@ class Principal(QMainWindow):
                                                 if tel_padre:
                                                     if not tel_padre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_padre, cod_fam1]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -13540,7 +13688,7 @@ class Principal(QMainWindow):
                                                         if tel_padre != tel_padre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_padre, cod_fam1
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -13583,6 +13731,8 @@ class Principal(QMainWindow):
                                                             if hist1 == 1:
                                                                 pass
                                                         # endregion
+                                                    else:
+                                                        QMessageBox.critical(self, "Mensaje de error","No se pudo registrar el carnet del padre")
                                                 else:
                                                     if ci_padre != ci_padre_bd or ex_ci_padre != ex_ci_padre_bd:
                                                         tabla = "carnet"
@@ -13609,7 +13759,7 @@ class Principal(QMainWindow):
                                             if tel_padre:
                                                 if not tel_padre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_padre, cod_fam1]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -13633,7 +13783,7 @@ class Principal(QMainWindow):
                                                     if tel_padre != tel_padre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_padre, cod_fam1
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -13751,7 +13901,7 @@ class Principal(QMainWindow):
                                                             # endregion
                                                             if tel_madre:
                                                                 tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
+                                                                columnas = "id_telefono,numero,familiar"
                                                                 id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                                 valores = [id_tel, tel_madre, id_familiar]
                                                                 resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -13855,7 +14005,7 @@ class Principal(QMainWindow):
                                                 if tel_madre:
                                                     if not tel_madre_bd:
                                                         tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
+                                                        columnas = "id_telefono,numero,familiar"
                                                         id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                         valores = [id_tel, tel_madre, cod_fam2]
                                                         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -13879,7 +14029,7 @@ class Principal(QMainWindow):
                                                         if tel_madre != tel_madre_bd:
                                                             tabla = "telefono"
                                                             columnas = "numero",
-                                                            id_tabla = "id_familiar"
+                                                            id_tabla = "familiar"
                                                             valores = tel_madre, cod_fam2
                                                             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                             if resp == 1:
@@ -13948,7 +14098,7 @@ class Principal(QMainWindow):
                                             if tel_madre:
                                                 if not tel_madre_bd:
                                                     tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
+                                                    columnas = "id_telefono,numero,familiar"
                                                     id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
                                                     valores = [id_tel, tel_madre, cod_fam2]
                                                     resp14 = self.Insertar_bbdd(tabla, columnas, valores)
@@ -13972,7 +14122,7 @@ class Principal(QMainWindow):
                                                     if tel_madre != tel_madre_bd:
                                                         tabla = "telefono"
                                                         columnas = "numero",
-                                                        id_tabla = "id_familiar"
+                                                        id_tabla = "familiar"
                                                         valores = tel_madre, cod_fam2
                                                         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
                                                         if resp == 1:
@@ -17669,7 +17819,7 @@ class Principal(QMainWindow):
                                         bbdd_carnet_madre=[]
                                     columna = "numero"
                                     tabla = "telefono"
-                                    valor = "id_familiar", id_fam1
+                                    valor = "familiar", id_fam1
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
@@ -17693,7 +17843,7 @@ class Principal(QMainWindow):
                                         bbdd_tel1=""
                                     columna = "numero"
                                     tabla = "telefono"
-                                    valor = "id_familiar", id_fam2
+                                    valor = "familiar", id_fam2
                                     resp7 = self.Select_bbdd(columna, tabla, valor)
                                     if resp7[0] == 1:
                                         # region registro en la tabla historial
@@ -17778,7 +17928,7 @@ class Principal(QMainWindow):
                                         bbdd_carnet_padre=[]
                                     columna = "numero"
                                     tabla = "telefono"
-                                    valor = "id_familiar", id_fam1
+                                    valor = "familiar", id_fam1
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
@@ -17800,7 +17950,7 @@ class Principal(QMainWindow):
                                         self.ui.txt_reg_pac_tel2.setText(str(resp6[1]))
                                     else:
                                         bbdd_tel2=""
-                                    valor = "id_familiar", id_fam2
+                                    valor = "familiar", id_fam2
                                     resp7 = self.Select_bbdd(columna, tabla, valor)
                                     if resp7[0] == 1:
                                         # region registro en la tabla historial
@@ -17866,7 +18016,7 @@ class Principal(QMainWindow):
                                         bbdd_carnet_madre = []
                                     columna = "numero"
                                     tabla = "telefono"
-                                    valor = "id_familiar", id_fam1
+                                    valor = "familiar", id_fam1
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
@@ -17927,7 +18077,7 @@ class Principal(QMainWindow):
                                         bbdd_carnet_padre = []
                                     columna = "numero"
                                     tabla = "telefono"
-                                    valor = "id_familiar", id_fam1
+                                    valor = "familiar", id_fam1
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
@@ -18157,7 +18307,7 @@ class Principal(QMainWindow):
                                         extension2 = "--"
                                     columna = "numero"
                                     tabla = "telefono"
-                                    valor = "id_familiar", id_fam1
+                                    valor = "familiar", id_fam1
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
@@ -18180,7 +18330,7 @@ class Principal(QMainWindow):
                                         tel1 = "No tiene número registrado"
                                     columna = "numero"
                                     tabla = "telefono"
-                                    valor = "id_familiar", id_fam2
+                                    valor = "familiar", id_fam2
                                     resp7 = self.Select_bbdd(columna, tabla, valor)
                                     if resp7[0] == 1:
                                         # region registro en la tabla historial
@@ -18260,7 +18410,7 @@ class Principal(QMainWindow):
                                         extension2 = "--"
                                     columna = "numero"
                                     tabla = "telefono"
-                                    valor = "id_familiar", id_fam2
+                                    valor = "familiar", id_fam2
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
@@ -18283,7 +18433,7 @@ class Principal(QMainWindow):
                                         tel1 = "No tiene número registrado"
                                     columna = "numero"
                                     tabla = "telefono"
-                                    valor = "id_familiar", id_fam1
+                                    valor = "familiar", id_fam1
                                     resp7 = self.Select_bbdd(columna, tabla, valor)
                                     if resp7[0] == 1:
                                         # region registro en la tabla historial
@@ -18345,7 +18495,7 @@ class Principal(QMainWindow):
                                     extension2 = "--"
                                     columna = "numero"
                                     tabla = "telefono"
-                                    valor = "id_familiar", id_fam1
+                                    valor = "familiar", id_fam1
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
@@ -18401,7 +18551,7 @@ class Principal(QMainWindow):
                                     extension1 = "--"
                                     columna = "numero"
                                     tabla = "telefono"
-                                    valor = "id_familiar", id_fam1
+                                    valor = "familiar", id_fam1
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
