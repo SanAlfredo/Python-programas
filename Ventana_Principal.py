@@ -509,6 +509,10 @@ class Principal(QMainWindow):
                 ap2_pac = ap2_pac.lower().strip()
             if nom_padre:
                 nom_padre=nom_padre.lower().strip()
+                if not tel_padre:
+                    tel_padre = 0
+                else:
+                    tel_padre = int(tel_padre)
                 if not ap1_padre and ap2_padre:
                     ap1_padre="sin apellido"
                     ap2_padre=ap2_padre.lower().strip()
@@ -520,6 +524,10 @@ class Principal(QMainWindow):
                     ap2_padre = ap2_padre.lower().strip()
             if nom_madre:
                 nom_madre=nom_madre.lower().strip()
+                if not tel_madre:
+                    tel_madre = 0
+                else:
+                    tel_madre = int(tel_madre)
                 if not ap1_madre and ap2_madre:
                     ap1_madre="sin apellido"
                     ap2_madre=ap2_madre.lower().strip()
@@ -550,14 +558,6 @@ class Principal(QMainWindow):
                 peso_pac=0.000
             if not talla_pac and peso_pac:
                 talla_pac=0.00
-            if not tel_padre:
-                tel_padre=0
-            else:
-                tel_padre=int(tel_padre)
-            if not tel_madre:                
-                tel_madre=0
-            else:
-                tel_madre=int(tel_madre)
             peso_pac=round(float(peso_pac),3)
             talla_pac=round(float(talla_pac),2)
             t=1
@@ -1515,52 +1515,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -1658,28 +1634,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -1761,52 +1736,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -1854,52 +1805,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -2106,28 +2033,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -2209,52 +2135,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -2302,52 +2204,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -2445,28 +2323,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -2548,52 +2425,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        # region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        # endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -2641,52 +2494,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    # region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    # endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -2917,28 +2746,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -3020,52 +2848,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -3113,52 +2917,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -3256,28 +3036,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                #region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                #endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -3359,52 +3138,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -3452,52 +3207,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -3704,28 +3435,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                #region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                #endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -3807,52 +3537,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -3900,52 +3606,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -4043,28 +3725,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -4146,52 +3827,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -4239,52 +3896,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -4539,28 +4172,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -4642,52 +4274,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -4735,52 +4343,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -4878,28 +4462,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -4981,52 +4564,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -5074,52 +4633,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -5326,28 +4861,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -5429,52 +4963,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -5522,52 +5032,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -5665,28 +5151,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -5768,52 +5253,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -5861,52 +5322,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -6137,28 +5574,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -6240,52 +5676,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -6333,52 +5745,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -6476,28 +5864,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -6579,52 +5966,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -6672,52 +6035,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -6924,28 +6263,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -7027,52 +6365,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -7120,52 +6434,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -7263,28 +6553,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -7366,52 +6655,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -7459,52 +6724,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -7784,28 +7025,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                #endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -7887,52 +7127,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -7980,52 +7196,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -8123,28 +7315,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                #endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -8226,52 +7417,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -8319,52 +7486,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -8571,28 +7714,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -8674,52 +7816,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -8767,52 +7885,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -8910,28 +8004,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -9013,52 +8106,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -9106,52 +8175,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -9382,28 +8427,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -9485,52 +8529,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -9578,52 +8598,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -9721,28 +8717,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -9824,52 +8819,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -9917,52 +8888,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -10169,28 +9116,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -10272,52 +9218,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -10365,52 +9287,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -10508,28 +9406,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -10611,52 +9508,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -10704,52 +9577,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -11004,28 +9853,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -11107,52 +9955,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -11200,52 +10024,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -11343,28 +10143,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -11446,52 +10245,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -11539,52 +10314,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -11791,28 +10542,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -11894,52 +10644,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -11987,52 +10713,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -12130,28 +10832,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -12233,52 +10934,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -12326,52 +11003,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -12604,28 +11257,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -12707,52 +11359,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -12800,52 +11428,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -12943,28 +11547,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -13046,52 +11649,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -13139,52 +11718,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
@@ -13391,28 +11946,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_padre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_padre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_padre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -13494,52 +12048,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_padre:
-                                                    if not tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_padre, cod_fam1]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_padre != tel_padre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_padre, cod_fam1
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                            # endregion
+                                                if tel_padre != tel_padre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_padre, cod_fam1
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_padre:
                                                 if e == 0:
@@ -13587,52 +12117,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_padre:
-                                                if not tel_padre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_padre, cod_fam1]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_padre != tel_padre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_padre, cod_fam1
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                        # endregion
+                                            if tel_padre != tel_padre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_padre, cod_fam1
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 if nom_madre:
                                     if d==0:
                                         tabla = "fecha"
@@ -13730,28 +12236,27 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                                            if tel_madre:
-                                                                tabla = "telefono"
-                                                                columnas = "id_telefono,numero,id_familiar"
-                                                                id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                valores = [id_tel, tel_madre, id_familiar]
-                                                                resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if resp14 == 1:
-                                                                    # region registro en la tabla historial
-                                                                    tabla = "fecha"
-                                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                    valores = [id_fecha1, fecha_actual, 7]
-                                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if hist == 1:
-                                                                        tabla = "historial"
-                                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                        if hist1 == 1:
-                                                                            pass
-                                                                    # endregion
+                                                            tabla = "telefono"
+                                                            columnas = "id_telefono,numero,id_familiar"
+                                                            id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
+                                                            valores = [id_tel, tel_madre, id_familiar]
+                                                            resp14 = self.Insertar_bbdd(tabla, columnas, valores)
+                                                            if resp14 == 1:
+                                                                # region registro en la tabla historial
+                                                                tabla = "fecha"
+                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                                valores = [id_fecha1, fecha_actual, 7]
+                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                                if hist == 1:
+                                                                    tabla = "historial"
+                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
+                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                                    if hist1 == 1:
+                                                                        pass
+                                                                # endregion
                                                             else:
                                                                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
                                                         else:
@@ -13833,52 +12338,28 @@ class Principal(QMainWindow):
                                                                     if hist1 == 1:
                                                                         pass
                                                                 # endregion
-                                                if tel_madre:
-                                                    if not tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "id_telefono,numero,id_familiar"
-                                                        id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                        valores = [id_tel, tel_madre, cod_fam2]
-                                                        resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if resp14 == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 7]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
-                                                    else:
-                                                        if tel_madre != tel_madre_bd:
-                                                            tabla = "telefono"
-                                                            columnas = "numero",
-                                                            id_tabla = "id_familiar"
-                                                            valores = tel_madre, cod_fam2
-                                                            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                            if resp == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 8]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist == 1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1 == 1:
-                                                                        pass
-                                                                # endregion
+                                                if tel_madre != tel_madre_bd:
+                                                    tabla = "telefono"
+                                                    columnas = "numero",
+                                                    id_tabla = "id_familiar"
+                                                    valores = tel_madre, cod_fam2
+                                                    resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                    if resp == 1:
+                                                        #region registro en la tabla historial
+                                                        tabla = "fecha"
+                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                        valores = [id_fecha1, fecha_actual, 8]
+                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                        if hist == 1:
+                                                            tabla = "historial"
+                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                            if hist1 == 1:
+                                                                pass
+                                                        #endregion
                                         else:
                                             if ci_madre:
                                                 if f == 0:
@@ -13926,52 +12407,28 @@ class Principal(QMainWindow):
                                                                 if hist1 == 1:
                                                                     pass
                                                             # endregion
-                                            if tel_madre:
-                                                if not tel_madre_bd:
-                                                    tabla = "telefono"
-                                                    columnas = "id_telefono,numero,id_familiar"
-                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                    valores = [id_tel, tel_madre, cod_fam2]
-                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                    if resp14 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist == 1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_tel), 1, "telefono"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1 == 1:
-                                                                pass
-                                                        # endregion
-                                                else:
-                                                    if tel_madre != tel_madre_bd:
-                                                        tabla = "telefono"
-                                                        columnas = "numero",
-                                                        id_tabla = "id_familiar"
-                                                        valores = tel_madre, cod_fam2
-                                                        resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
-                                                        if resp == 1:
-                                                            # region registro en la tabla historial
-                                                            tabla = "fecha"
-                                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                            valores = [id_fecha1, fecha_actual, 8]
-                                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if hist == 1:
-                                                                tabla = "historial"
-                                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
-                                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                if hist1 == 1:
-                                                                    pass
-                                                            # endregion
+                                            if tel_madre != tel_madre_bd:
+                                                tabla = "telefono"
+                                                columnas = "numero",
+                                                id_tabla = "id_familiar"
+                                                valores = tel_madre, cod_fam2
+                                                resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                                                if resp == 1:
+                                                    #region registro en la tabla historial
+                                                    tabla = "fecha"
+                                                    columnas = "id_fecha,fechayhora,tipo_fecha"
+                                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+                                                    valores = [id_fecha1, fecha_actual, 8]
+                                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
+                                                    if hist == 1:
+                                                        tabla = "historial"
+                                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+                                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+                                                        historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fam1), 2, "telefono"]
+                                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+                                                        if hist1 == 1:
+                                                            pass
+                                                    #endregion
                                 bbdd_paciente=[]
                                 bbdd_carnet_pac=[]
                                 bbdd_antec_pac=[]
