@@ -435,16 +435,6 @@ class Principal(QMainWindow):
         global reg_pac
         global persona
         global matricula_user
-        global usuario
-        global bbdd_paciente
-        global bbdd_carnet_pac
-        global bbdd_antec_pac
-        global bbdd_padre
-        global bbdd_madre
-        global bbdd_carnet_padre
-        global bbdd_carnet_madre
-        global bbdd_tel1
-        global bbdd_tel2
         nom_pac=self.ui.txt_reg_pac_nom.text()
         ap1_pac=self.ui.txt_reg_pac_app1.text()
         ap2_pac=self.ui.txt_reg_pac_app2.text()
@@ -607,31 +597,8 @@ class Principal(QMainWindow):
                                     pass
                             # endregion
                             if ci_pac:
-                                tabla = "carnet"
-                                columnas = "id_carnet,numero,extension,persona"
-                                id_ci = self.Conseguir_id_tabla(1, "id_carnet", tabla)
-                                valores = [id_ci, str(ci_pac).strip(), ex_ci_pac, id_persona]
-                                resp3 = self.Insertar_bbdd(tabla, columnas, valores)
-                                if resp3==1:
-                                    # region registro en la tabla historial
-                                    tabla = "fecha"
-                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                    valores = [id_fecha1, fecha_actual, 7]
-                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                    if hist==1:
-                                        tabla = "historial"
-                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                        historial_log=[id_historial,matricula_user,id_fecha1,str(id_ci),1,'carnet']
-                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                        if hist1==1:
-                                            pass
-                                    # endregion
-                                else:
-                                    QMessageBox.critical(self,"Mensaje de error","No se pudo ingresar el carnet a la bbdd")
-                            else:
-                                QMessageBox.critical(self,"Mensaje de error","No se pudo ingresar los datos personales del paciente")
+                                enviar=ci_pac,ex_ci_pac,id_persona
+                                self.Registrar_carnet(3,enviar)
                             tabla = "dato_general"
                             columnas = "id_dato,peso,talla"
                             id_dato = self.Conseguir_id_tabla(1, "id_dato", tabla)
@@ -678,289 +645,14 @@ class Principal(QMainWindow):
                                                 pass
                                         # endregion
                                         if r==1:
-                                            tabla = "antecedentes"
-                                            columnas = "id_antecedentes, patologicos, alergias, paciente"
-                                            id_antecedentes = self.Conseguir_id_tabla(1, "id_antecedentes", tabla)
-                                            valores = [id_antecedentes, antecedentes,alergias, id_paciente]
-                                            resp7 = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if resp7==1:
-                                                # region registro en la tabla historial
-                                                tabla = "fecha"
-                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                valores = [id_fecha1, fecha_actual, 7]
-                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                if hist==1:
-                                                    tabla = "historial"
-                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                    historial_log=[id_historial,matricula_user,id_fecha1,str(id_antecedentes),1,'antecedentes']
-                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                    if hist1==1:
-                                                        pass
-                                                # endregion
-                                            else:
-                                                QMessageBox.critical(self,"Mensaje de error","No se pudo guardar la tabla antecedentes")
+                                            enviar=antecedentes,alergias,id_paciente
+                                            self.Registrar_ante_pac(2,enviar)
                                         if nom_padre:
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha, fecha_actual, 7]
-                                            resp8 = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if resp8 == 1:
-                                                # region registro en la tabla historial
-                                                tabla = "fecha"
-                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                valores = [id_fecha1, fecha_actual, 7]
-                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                if hist==1:
-                                                    tabla = "historial"
-                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                    historial_log=[id_historial,matricula_user,id_fecha1,str(id_fecha),1,'fecha']
-                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                    if hist1==1:
-                                                        pass
-                                                # endregion
-                                                id_persona = ""
-                                                persona = [id_persona, nom_padre, ap1_padre, ap2_padre, id_fecha, 1]
-                                                id_persona = self.Creador_id()
-                                                resp9 = self.Verifica_id_crea_id(1, id_persona)
-                                                if resp9[0] == 1:
-                                                    id_persona = resp9[1]
-                                                    persona=[id_persona,nom_padre,ap1_padre,ap2_padre,id_fecha,1]
-                                                    tabla = "persona"
-                                                    columnas = "id_persona, nombre, apellido1, apellido2, fecha, tipo_sexo"
-                                                    resp10 = self.Insertar_bbdd(tabla, columnas, persona)
-                                                    if resp10 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist==1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log=[id_historial,matricula_user,id_fecha1,str(id_persona),1,'persona']
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1==1:
-                                                                pass
-                                                        # endregion
-                                                        if ci_padre:
-                                                            tabla = "carnet"
-                                                            columnas = "id_carnet,numero,extension,persona"
-                                                            id_ci = self.Conseguir_id_tabla(1, "id_carnet", tabla)
-                                                            valores = [id_ci, str(ci_padre).strip(), ex_ci_padre, id_persona]
-                                                            resp11 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if resp11 == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 7]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist==1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log=[id_historial,matricula_user,id_fecha1,str(id_ci),1,"carnet"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1==1:
-                                                                        pass
-                                                                # endregion
-                                                            else:
-                                                                QMessageBox.critical(self, "Mensaje de error", "No se pudo ingresar el carnet a la bbdd")
-                                                        id_familiar = "FAM"
-                                                        resp12 = self.Verifica_id_crea_id(3, id_familiar)
-                                                        if resp12[0]==1:
-                                                            id_familiar=resp12[1]
-                                                            familiar=[id_familiar,id_persona,1,id_paciente]
-                                                            tabla = "familiar"
-                                                            columnas = "id_familiar, id_persona, tipo_familiar, paciente"
-                                                            resp13 = self.Insertar_bbdd(tabla, columnas, familiar)
-                                                            if resp13==1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 7]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist==1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log=[id_historial,matricula_user,id_fecha1,str(id_familiar),1,"familiar"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1==1:
-                                                                        pass
-                                                                # endregion
-                                                                if tel_padre:
-                                                                    tabla = "telefono"
-                                                                    columnas = "id_telefono,numero,familiar"
-                                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                    valores = [id_tel, tel_padre, id_familiar]
-                                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if resp14==1:
-                                                                        # region registro en la tabla historial
-                                                                        tabla = "fecha"
-                                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                        if hist==1:
-                                                                            tabla = "historial"
-                                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                            historial_log=[id_historial,matricula_user,id_fecha1,str(id_tel),1,"telefono"]
-                                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                            if hist1==1:
-                                                                                pass
-                                                                        # endregion
-                                                                    else:
-                                                                        QMessageBox.critical(self,"Mensaje de error","No se pudo guardar el teléfono")
-                                                            else:
-                                                                QMessageBox.critical(self,"Mensaje de error","No se pudo registrar al familiar")
-                                                        else:
-                                                            QMessageBox.critical(self,"Mensaje de error","No se pudo encontrar el id de familiar")
-                                                    else:
-                                                        QMessageBox.critical(self,"Mensaje de error","No se pudo guardar los datos personales del padre")
-                                                else:
-                                                    QMessageBox.critical(self,"Mensaje de error","No se encontró un id para el padre")
-                                            else:
-                                                QMessageBox.critical(self,"Mensaje de error","No se pudo ingresar la fecha del padre")
+                                            enviar = nom_padre, ap1_padre, ap2_padre, ci_padre, ex_ci_padre, tel_padre, id_paciente,1
+                                            self.Registrar_Progenitor(3,enviar)
                                         if nom_madre:
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha, fecha_actual, 7]
-                                            resp8 = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if resp8 == 1:
-                                                # region registro en la tabla historial
-                                                tabla = "fecha"
-                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                valores = [id_fecha1, fecha_actual, 7]
-                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                if hist==1:
-                                                    tabla = "historial"
-                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                    historial_log=[id_historial,matricula_user,id_fecha1,str(id_fecha),1,"fecha"]
-                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                    if hist1==1:
-                                                        pass
-                                                # endregion
-                                                id_persona = ""
-                                                persona = [id_persona, nom_madre, ap1_madre, ap2_madre, id_fecha, 2]
-                                                id_persona = self.Creador_id()
-                                                resp9 = self.Verifica_id_crea_id(1, id_persona)
-                                                if resp9[0] == 1:
-                                                    id_persona = resp9[1]
-                                                    persona=[id_persona,nom_madre,ap1_madre,ap2_madre,id_fecha,2]
-                                                    tabla = "persona"
-                                                    columnas = "id_persona, nombre, apellido1, apellido2, fecha, tipo_sexo"
-                                                    resp10 = self.Insertar_bbdd(tabla, columnas, persona)
-                                                    if resp10 == 1:
-                                                        # region registro en la tabla historial
-                                                        tabla = "fecha"
-                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                        if hist==1:
-                                                            tabla = "historial"
-                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                            historial_log=[id_historial,matricula_user,id_fecha1,str(id_persona),1,"persona"]
-                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                            if hist1==1:
-                                                                pass
-                                                        # endregion
-                                                        if ci_madre:
-                                                            tabla = "carnet"
-                                                            columnas = "id_carnet,numero,extension,persona"
-                                                            id_ci = self.Conseguir_id_tabla(1, "id_carnet", tabla)
-                                                            valores = [id_ci, str(ci_madre).strip(), ex_ci_madre, id_persona]
-                                                            resp11 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                            if resp11 == 1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 7]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist==1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log=[id_historial,matricula_user,id_fecha1,str(id_ci),1,"carnet"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1==1:
-                                                                        pass
-                                                                # endregion
-                                                            else:
-                                                                QMessageBox.critical(self, "Mensaje de error", "No se pudo ingresar el carnet a la bbdd")
-                                                        id_familiar = "FAM"
-                                                        resp12 = self.Verifica_id_crea_id(3, id_familiar)
-                                                        if resp12[0]==1:
-                                                            id_familiar=resp12[1]
-                                                            familiar=[id_familiar,id_persona,2,id_paciente]
-                                                            tabla = "familiar"
-                                                            columnas = "id_familiar, id_persona, tipo_familiar, paciente"
-                                                            resp13 = self.Insertar_bbdd(tabla, columnas, familiar)
-                                                            if resp13==1:
-                                                                # region registro en la tabla historial
-                                                                tabla = "fecha"
-                                                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                valores = [id_fecha1, fecha_actual, 7]
-                                                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                if hist==1:
-                                                                    tabla = "historial"
-                                                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                    historial_log=[id_historial,matricula_user,id_fecha1,str(id_familiar),1,"familiar"]
-                                                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                    if hist1==1:
-                                                                        pass
-                                                                # endregion
-                                                                if tel_madre:
-                                                                    tabla = "telefono"
-                                                                    columnas = "id_telefono,numero,familiar"
-                                                                    id_tel = self.Conseguir_id_tabla(1, "id_telefono", tabla)
-                                                                    valores = [id_tel, tel_madre, id_familiar]
-                                                                    resp14 = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                    if resp14==1:
-                                                                        # region registro en la tabla historial
-                                                                        tabla = "fecha"
-                                                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                                                        valores = [id_fecha1, fecha_actual, 7]
-                                                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                                                        if hist==1:
-                                                                            tabla = "historial"
-                                                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                                            historial_log=[id_historial,matricula_user,id_fecha1,str(id_tel),1,"telefono"]
-                                                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                                            if hist1==1:
-                                                                                pass
-                                                                        # endregion
-                                                                    else:
-                                                                        QMessageBox.critical(self,"Mensaje de error","No se pudo guardar el teléfono")
-                                                            else:
-                                                                QMessageBox.critical(self, "Mensaje de error", "No se pudo registrar al familiar")
-                                                        else:
-                                                            QMessageBox.critical(self, "Mensaje de error", "No se pudo encontrar el id de familiar")
-                                                    else:
-                                                        QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar los datos personales de la madre")
-                                                else:
-                                                    QMessageBox.critical(self, "Mensaje de error", "No se encontró un id para la madre")
-                                            else:
-                                                QMessageBox.critical(self, "Mensaje de error", "No se pudo ingresar la fecha de la madre")
+                                            enviar = nom_madre, ap1_madre, ap2_madre, ci_madre, ex_ci_madre, tel_madre, id_paciente, 2
+                                            self.Registrar_Progenitor(3, enviar)
                                         paciente1 = "{} {} {}".format(self.ui.txt_reg_pac_nom.text(), self.ui.txt_reg_pac_app1.text(),
                                                                      self.ui.txt_reg_pac_app2.text())
                                         codigo = id_paciente
@@ -975,20 +667,23 @@ class Principal(QMainWindow):
                             else:
                                 QMessageBox.critical(self,"Mensaje de error","No se pudo ingresar los datos de peso y talla de nacimiento")
                         else:
-                            QMessageBox.critical(self,"Mensaje de error","No se pudo ingresar los datos personales del paciente")
+                            QMessageBox.critical(self,"Mensaje de error","No se pudo ingresar los datos:\n"
+                                                                         "nombre, apellidos, fecha de nacimiento del paciente")
                     else:
                         QMessageBox.critical(self,"Mensaje de error","Ocurrió un error y no se pudo verificar el id del paciente")
                 else:
                     QMessageBox.critical(self,"Mensaje de error","No se pudo ingresar la fecha de nacimiento del paciente")
             if reg_pac == 2:
-                datos_a_mandar = nom_pac, ap1_pac, ap2_pac, ci_pac, ex_ci_pac, fecha_pac, fecha_pac1, sexo_pac, factor_pac, grupo_pac, \
-                                 peso_pac, talla_pac, antecedentes, alergias, procedencia, residencia, direccion, barrio, nom_padre, \
-                                 ap1_padre, ap2_padre, ci_padre, ex_ci_padre, tel_padre, nom_madre, ap1_madre, ap2_madre, ci_madre, \
-                                 ex_ci_madre, tel_madre
+                datos_a_mandar = nom_pac, ap1_pac, ap2_pac, ci_pac, ex_ci_pac, fecha_pac, \
+                                 fecha_pac1, sexo_pac, factor_pac, grupo_pac, peso_pac, \
+                                 talla_pac, antecedentes, alergias, procedencia, residencia, \
+                                 direccion, barrio, nom_padre, ap1_padre, ap2_padre, \
+                                 ci_padre, ex_ci_padre, tel_padre, nom_madre, ap1_madre, \
+                                 ap2_madre, ci_madre, ex_ci_madre, tel_madre
                 self.Verificar5(datos_a_mandar)
     #endregion
     # ****************************************************************************************************************************
-    # *********************PACIENTE
+    #region *********************     REGISTRO Y ACTUALIZACION DE DATOS
     def Registrar_carnet(self, caso, datos):
         global bbdd_paciente
         global matricula_user
@@ -997,7 +692,7 @@ class Principal(QMainWindow):
             ci=datos[3]
             ex_ci=datos[4]
             cod_per=bbdd_paciente[14]
-        if caso==2:
+        if caso==2 or caso==3:
             ci=datos[0]
             ex_ci=datos[1]
             cod_per=datos[2]
@@ -1023,7 +718,10 @@ class Principal(QMainWindow):
                     pass
             # endregion
         else:
-            QMessageBox.critical(self, "Mensaje de error", "No se pudo ingresar el carnet a la bbdd")
+            if caso==1 or caso==3:
+                QMessageBox.critical(self, "Mensaje de error", "No se pudo registrar el carnet\ndel paciente en la bbdd")
+            else:
+                QMessageBox.critical(self, "Mensaje de error", "No se pudo registrar el carnet\ndel padre o madre en la bbdd")
 
     def Registrar_ante_pac(self,caso,datos):
         global matricula_user
@@ -1033,6 +731,10 @@ class Principal(QMainWindow):
             antecedentes=datos[12]
             alergias =datos[13]
             cod_pac=bbdd_paciente[13]
+        if caso==2:
+            antecedentes=datos[0]
+            alergias=datos[1]
+            cod_pac=datos[2]
         tabla = "antecedentes"
         columnas = "id_antecedentes, patologicos, alergias, paciente"
         id_antecedentes = self.Conseguir_id_tabla(1, "id_antecedentes", tabla)
@@ -1106,6 +808,10 @@ class Principal(QMainWindow):
             else:
                 if caso==1:
                     QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar el carnet del paciente")
+                if caso==2:
+                    QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar el carnet del padre")
+                if caso==3:
+                    QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar el carnet de la madre")
 
     def Actualiza_ante_pac(self,datos):
         global matricula_user
@@ -1141,8 +847,6 @@ class Principal(QMainWindow):
             else:
                 QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar los antecedentes del paciente")
 
-    # ***************************************************************************************************************************
-    # ********************* DE LOS PROGENITORES
     def Actualiza_tel(self,datos):
         global matricula_user
         fecha_actual = datetime.datetime.today()
@@ -1169,6 +873,11 @@ class Principal(QMainWindow):
                 if hist1 == 1:
                     pass
             # endregion
+        else:
+            if datos[2]==1:
+                QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar el teléfono del padre")
+            else:
+                QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar el teléfono de la madre")
 
     def Registrar_tel(self,datos):
         global matricula_user
@@ -1197,11 +906,15 @@ class Principal(QMainWindow):
                     pass
             # endregion
         else:
-            QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono")
+            if datos[2]==1:
+                QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono del padre")
+            else:
+                QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono de la madre")
 
     def Registrar_Progenitor(self,caso,datos):
         global matricula_user
         global bbdd_paciente
+        global persona
         fecha_actual = datetime.datetime.today()
         if caso==1:
             nom=datos[18]
@@ -1210,6 +923,7 @@ class Principal(QMainWindow):
             ci=datos[21]
             tel=datos[23]
             cod_pac = bbdd_paciente[13]
+            sexo_progenitor=1
         if caso==2:
             nom = datos[24]
             ap1 = datos[25]
@@ -1217,6 +931,18 @@ class Principal(QMainWindow):
             ci = datos[27]
             tel = datos[29]
             cod_pac = bbdd_paciente[13]
+            sexo_progenitor = 2
+        if caso==3:
+            nom = datos[0]
+            ap1 = datos[1]
+            ap2 = datos[2]
+            ci = datos[3]
+            tel = datos[5]
+            cod_pac = datos[6]
+            if datos[7]==1:
+                sexo_progenitor = 1
+            else:
+                sexo_progenitor = 2
         tabla = "fecha"
         columnas = "id_fecha,fechayhora,tipo_fecha"
         id_fecha = self.Conseguir_id_tabla(1, "id_fecha", tabla)
@@ -1270,6 +996,8 @@ class Principal(QMainWindow):
                             enviar=datos[21],datos[22],id_persona
                         if caso==2:
                             enviar=datos[27],datos[28],id_persona
+                        if caso==3:
+                            enviar=datos[3],datos[4],id_persona
                         self.Registrar_carnet(2,enviar)
                     id_familiar = "FAM"
                     resp12 = self.Verifica_id_crea_id(3, id_familiar)
@@ -1298,23 +1026,34 @@ class Principal(QMainWindow):
                             # endregion
                             if tel:
                                 if caso==1:
-                                    enviar=datos[23],id_familiar
+                                    enviar=datos[23],id_familiar,1
                                 if caso==2:
-                                    enviar=datos[29],id_familiar
+                                    enviar=datos[29],id_familiar,2
+                                if caso==3:
+                                    if datos[7]==1:
+                                        enviar=datos[5],id_familiar,1
+                                    else:
+                                        enviar=datos[5],id_familiar,2
                                 self.Registrar_tel(enviar)
                         else:
                             QMessageBox.critical(self, "Mensaje de error", "No se pudo registrar al familiar")
                     else:
                         QMessageBox.critical(self, "Mensaje de error", "No se pudo encontrar el id de familiar")
                 else:
-                    if caso==1:
+                    if sexo_progenitor==1:
                         QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar los datos personales del padre")
+                    if sexo_progenitor==2:
+                        QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar los datos personales de la madre")
             else:
-                if caso==1:
+                if sexo_progenitor==1:
                     QMessageBox.critical(self, "Mensaje de error", "No se encontró un id para el padre")
+                if sexo_progenitor==2:
+                    QMessageBox.critical(self, "Mensaje de error", "No se encontró un id para la madre")
         else:
-            if caso==1:
+            if sexo_progenitor==1:
                 QMessageBox.critical(self, "Mensaje de error", "No se pudo ingresar la fecha del padre")
+            if sexo_progenitor==2:
+                QMessageBox.critical(self, "Mensaje de error", "No se pudo ingresar la fecha de la madre")
 
     def Verifica_ci_tel_Progenitor(self,datos):
         global bbdd_carnet_padre
@@ -1354,12 +1093,14 @@ class Principal(QMainWindow):
                 else:
                     self.Actualiza_carnet(3, enviar)
         if tel:
+            if datos[5] == 1:
+                enviar = datos[2], datos[3], 1
+            else:
+                enviar = datos[2], datos[3], 2
             if f==0:
-                enviar=datos[2],datos[3]
                 self.Registrar_tel(enviar)
             else:
                 if tel != tel1:
-                    enviar=datos[2],datos[3]
                     self.Actualiza_tel(enviar)
 
     def Verificar_Progenitor(self,caso,datos):
@@ -1412,7 +1153,7 @@ class Principal(QMainWindow):
                 self.Verifica_ci_tel_Progenitor(enviar)
         else:
             self.Verifica_ci_tel_Progenitor(enviar)
-
+    #endregion
     # ******************************* CONTIENE TODAS LAS VERIFICACIONES
     def Verificar1(self,datos):
         global bbdd_paciente
@@ -1510,7 +1251,7 @@ class Principal(QMainWindow):
                         pass
                 # endregion
             else:
-                QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar su nueva fecha de nacimiento")
+                QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar su fecha de nacimiento")
             self.Verificar1(datos)
         else:
             self.Verificar1(datos)
@@ -1547,7 +1288,8 @@ class Principal(QMainWindow):
                         pass
                 # endregion
             else:
-                QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar los cambios en el peso y la talla")
+                QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar los cambios\n "
+                                                               "en el peso y la talla del paciente")
             self.Verificar2(datos)
         else:
             self.Verificar2(datos)
@@ -1593,7 +1335,13 @@ class Principal(QMainWindow):
                         pass
                 # endregion
             else:
-                QMessageBox.critical(self, "Mensaje de error","No se pudo guardar los cambios en el historial del paciente")
+                QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar:\n"
+                                                              "\t\tgrupo sanguineo\n"
+                                                              "\t\tfactor sanguineo\n"
+                                                              "\t\tprocedencia\n"
+                                                              "\t\tresidencia\n"
+                                                              "\t\tdireccion\n"
+                                                              "\t\tbarrio\n")
             self.Verificar3(datos)
         else:
             self.Verificar3(datos)
@@ -1634,7 +1382,8 @@ class Principal(QMainWindow):
                         pass
                 # endregion
             else:
-                QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar los datos personales")
+                QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar los datos:\n"
+                                                               "nombre, apellidos y sexo del paciente")
             self.Verificar4(datos)
         else:
             self.Verificar4(datos)
