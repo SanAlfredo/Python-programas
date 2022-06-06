@@ -244,6 +244,24 @@ class Principal(QMainWindow):
         self.ui.Stacked_admin.setCurrentIndex(0)
         self.ui.Stacked_admin_log.setCurrentIndex(0)
     #endregion
+    #region registro en la tabla historial
+    def Registro_tabla_historial(self,datos):
+        global matricula_user
+        fecha_actual = datetime.datetime.today()
+        tabla = "fecha"
+        columnas = "id_fecha,fechayhora,tipo_fecha"
+        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
+        valores = [id_fecha1, fecha_actual, datos[0]]
+        hist = self.Insertar_bbdd(tabla, columnas, valores)
+        if hist == 1:
+            tabla = "historial"
+            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
+            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
+            historial_log = [id_historial, matricula_user, id_fecha1, datos[1], datos[2], datos[3]]
+            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
+            if hist1 == 1:
+                pass
+     #endregion
     #region Cierre de sesion, para usuarios y administrador
     def Salir_al_inicio(self):
         """
@@ -251,35 +269,20 @@ class Principal(QMainWindow):
         con esto iniciamos de cero
         """
         global usuario
-        global matricula_user
-        fecha_actual=datetime.datetime.today()
         usuario1=Clases.Metodos.Obtener_datos('USER')
         resp = QMessageBox.question(self, "Cierre de sesión", "¿Está seguro de cerrar la sesión?", QMessageBox.Yes
                                     | QMessageBox.No, QMessageBox.No)
         if resp == QMessageBox.Yes:
             if usuario != usuario1:
                 # region registro en la tabla historial
-                tabla = "fecha"
-                columnas = "id_fecha,fechayhora,tipo_fecha"
-                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                valores = [id_fecha1, fecha_actual, 6]
-                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                if hist == 1:
-                    tabla = "historial"
-                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                    historial_log = [id_historial, matricula_user, id_fecha1, "Cierre de sesión", 5, "Salir del sistema"]
-                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                    if hist1 == 1:
-                        pass
+                enviar_datos = 6, "Cierre de sesión", 5, "Salir del sistema"
+                self.Registro_tabla_historial(enviar_datos)
                 # endregion
             self.Iniciar_cero()
     #endregion
     #region Sobre escritura al metodo close
     def closeEvent(self,event):
         global usuario
-        global matricula_user
-        fecha_actual=datetime.datetime.today()
         usuario1 = Clases.Metodos.Obtener_datos('USER')
         cerrar=QMessageBox.question(self,"Cerrar programa","¿Está seguro de cerrar el programa?",QMessageBox.Yes
                                         | QMessageBox.No, QMessageBox.No)
@@ -287,19 +290,8 @@ class Principal(QMainWindow):
             if usuario:
                 if usuario != usuario1:
                     # region registro en la tabla historial
-                    tabla = "fecha"
-                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                    valores = [id_fecha1, fecha_actual, 6]
-                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                    if hist == 1:
-                        tabla = "historial"
-                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                        historial_log = [id_historial, matricula_user, id_fecha1, "Cierre de sesión", 5, "Salir del sistema"]
-                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                        if hist1 == 1:
-                            pass
+                    enviar_datos = 6, "Cierre de sesión", 5, "Salir del sistema"
+                    self.Registro_tabla_historial(enviar_datos)
                     # endregion
                     event.accept()
                 else:
@@ -434,7 +426,6 @@ class Principal(QMainWindow):
     def Ventana_nueva_hist(self):
         global reg_pac
         global persona
-        global matricula_user
         nom_pac=self.ui.txt_reg_pac_nom.text()
         ap1_pac=self.ui.txt_reg_pac_app1.text()
         ap2_pac=self.ui.txt_reg_pac_app2.text()
@@ -445,7 +436,6 @@ class Principal(QMainWindow):
         fecha_pac=fecha_pac.strftime('%Y-%m-%d')
         fecha_pac1=fecha_pac
         fecha_pac=datetime.datetime.strptime(fecha_pac,'%Y-%m-%d')
-        fecha_actual = datetime.datetime.today()
         sexo_pac=self.ui.cb_reg_pac_sex.currentIndex()
         factor_pac=self.ui.cb_reg_pac_gsf.currentIndex()
         grupo_pac=self.ui.cb_reg_pac_gs.currentIndex()
@@ -556,19 +546,8 @@ class Principal(QMainWindow):
                 resp = self.Insertar_bbdd(tabla, columnas, valores)
                 if resp==1:
                     #region registro en la tabla historial
-                    tabla = "fecha"
-                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                    valores = [id_fecha1, fecha_actual, 7]
-                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                    if hist==1:
-                        tabla = "historial"
-                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                        historial_log=[id_historial,matricula_user,id_fecha1,str(id_fecha),1,'fecha']
-                        hist1=self.Insertar_bbdd(tabla,columnas,historial_log)
-                        if hist1==0:
-                            QMessageBox.critical(self,"Mensaje de error","no se puede ingresar los historiales")
+                    enviar_datos = 7, str(id_fecha), 1, "fecha"
+                    self.Registro_tabla_historial(enviar_datos)
                     #endregion
                     id_persona=""
                     persona = [id_persona, nom_pac, ap1_pac, ap2_pac, id_fecha, sexo_pac]
@@ -582,19 +561,8 @@ class Principal(QMainWindow):
                         resp2 = self.Insertar_bbdd(tabla, columnas, persona)
                         if resp2==1:
                             # region registro en la tabla historial
-                            tabla = "fecha"
-                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                            valores = [id_fecha1, fecha_actual, 7]
-                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                            if hist==1:
-                                tabla = "historial"
-                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                historial_log = [id_historial,matricula_user,id_fecha1,str(id_persona),1,'persona']
-                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                if hist1==1:
-                                    pass
+                            enviar_datos = 7, str(id_persona), 1, "persona"
+                            self.Registro_tabla_historial(enviar_datos)
                             # endregion
                             if ci_pac:
                                 enviar=ci_pac,ex_ci_pac,id_persona
@@ -606,19 +574,8 @@ class Principal(QMainWindow):
                             resp4 = self.Insertar_bbdd(tabla, columnas, valores)
                             if resp4==1:
                                 # region registro en la tabla historial
-                                tabla = "fecha"
-                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                valores = [id_fecha1, fecha_actual, 7]
-                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                if hist==1:
-                                    tabla = "historial"
-                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                    historial_log=[id_historial,matricula_user,id_fecha1,str(id_dato),1,'dato_general']
-                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                    if hist1==1:
-                                        pass
+                                enviar_datos = 7, str(id_dato), 1, "dato_general"
+                                self.Registro_tabla_historial(enviar_datos)
                                 # endregion
                                 id_paciente="PAC"
                                 resp5=self.Verifica_id_crea_id(2,id_paciente)
@@ -630,19 +587,8 @@ class Principal(QMainWindow):
                                     resp6 = self.Insertar_bbdd(tabla, columnas, paciente)
                                     if resp6==1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha_actual, 7]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist==1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log=[id_historial,matricula_user,id_fecha1,str(id_paciente),1,'paciente']
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1==1:
-                                                pass
+                                        enviar_datos = 7, str(id_paciente), 1, "paciente"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         if r==1:
                                             enviar=antecedentes,alergias,id_paciente
@@ -686,8 +632,6 @@ class Principal(QMainWindow):
     #region *********************     REGISTRO Y ACTUALIZACION DE DATOS
     def Registrar_carnet(self, caso, datos):
         global bbdd_paciente
-        global matricula_user
-        fecha_actual = datetime.datetime.today()
         if caso==1:
             ci=datos[3]
             ex_ci=datos[4]
@@ -703,19 +647,8 @@ class Principal(QMainWindow):
         resp4 = self.Insertar_bbdd(tabla, columnas, valores)
         if resp4 == 1:
             # region registro en la tabla historial
-            tabla = "fecha"
-            columnas = "id_fecha,fechayhora,tipo_fecha"
-            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-            valores = [id_fecha1, fecha_actual, 7]
-            hist = self.Insertar_bbdd(tabla, columnas, valores)
-            if hist == 1:
-                tabla = "historial"
-                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                historial_log = [id_historial, matricula_user, id_fecha1, str(id_ci), 1, 'carnet']
-                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                if hist1 == 1:
-                    pass
+            enviar_datos = 7, str(id_ci), 1, "carnet"
+            self.Registro_tabla_historial(enviar_datos)
             # endregion
         else:
             if caso==1 or caso==3:
@@ -724,9 +657,7 @@ class Principal(QMainWindow):
                 QMessageBox.critical(self, "Mensaje de error", "No se pudo registrar el carnet\ndel padre o madre en la bbdd")
 
     def Registrar_ante_pac(self,caso,datos):
-        global matricula_user
         global bbdd_paciente
-        fecha_actual = datetime.datetime.today()
         if caso==1:
             antecedentes=datos[12]
             alergias =datos[13]
@@ -742,26 +673,14 @@ class Principal(QMainWindow):
         resp6 = self.Insertar_bbdd(tabla, columnas, valores)
         if resp6 == 1:
             # region registro en la tabla historial
-            tabla = "fecha"
-            columnas = "id_fecha,fechayhora,tipo_fecha"
-            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-            valores = [id_fecha1, fecha_actual, 7]
-            hist = self.Insertar_bbdd(tabla, columnas, valores)
-            if hist == 1:
-                tabla = "historial"
-                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                historial_log = [id_historial, matricula_user, id_fecha1, str(id_antecedentes), 1,'antecedentes']
-                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                if hist1 == 1:
-                    pass
+            enviar_datos = 7, str(id_antecedentes), 1, "antecedentes"
+            self.Registro_tabla_historial(enviar_datos)
             # endregion
         else:
             QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar la tabla antecedentes")
 
     def Actualiza_carnet(self,caso,datos):
         global bbdd_carnet_pac
-        global matricula_user
         global bbdd_carnet_padre
         global bbdd_carnet_madre
         if caso==1:
@@ -782,7 +701,6 @@ class Principal(QMainWindow):
             ci_bd = bbdd_carnet_madre[0]
             ci=datos[0]
             ex_ci=datos[1]
-        fecha_actual = datetime.datetime.today()
         if ci != ci_bd or ex_ci != ex_bd:
             tabla = "carnet"
             columnas = "numero", "extension"
@@ -791,19 +709,8 @@ class Principal(QMainWindow):
             resp5 = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
             if resp5 == 1:
                 # region registro en la tabla historial
-                tabla = "fecha"
-                columnas = "id_fecha,fechayhora,tipo_fecha"
-                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                valores = [id_fecha1, fecha_actual, 8]
-                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                if hist == 1:
-                    tabla = "historial"
-                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_ci), 2, "carnet"]
-                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                    if hist1 == 1:
-                        pass
+                enviar_datos = 8, str(cod_ci), 2, "carnet"
+                self.Registro_tabla_historial(enviar_datos)
                 # endregion
             else:
                 if caso==1:
@@ -814,9 +721,7 @@ class Principal(QMainWindow):
                     QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar el carnet de la madre")
 
     def Actualiza_ante_pac(self,datos):
-        global matricula_user
         global bbdd_antec_pac
-        fecha_actual = datetime.datetime.today()
         antecedentes = datos[12]
         alergias = datos[13]
         cod_ant_pac = bbdd_antec_pac[0]
@@ -830,26 +735,13 @@ class Principal(QMainWindow):
             resp7 = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
             if resp7 == 1:
                 # region registro en la tabla historial
-                tabla = "fecha"
-                columnas = "id_fecha,fechayhora,tipo_fecha"
-                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                valores = [id_fecha1, fecha_actual, 8]
-                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                if hist == 1:
-                    tabla = "historial"
-                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_ant_pac), 2,"antecedentes"]
-                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                    if hist1 == 1:
-                        pass
+                enviar_datos = 8, str(cod_ant_pac), 2, "antecedentes"
+                self.Registro_tabla_historial(enviar_datos)
                 # endregion
             else:
                 QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar los antecedentes del paciente")
 
     def Actualiza_tel(self,datos):
-        global matricula_user
-        fecha_actual = datetime.datetime.today()
         tel=datos[0]
         cod_fam=datos[1]
         tabla = "telefono"
@@ -859,19 +751,8 @@ class Principal(QMainWindow):
         resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
         if resp == 1:
             # region registro en la tabla historial
-            tabla = "fecha"
-            columnas = "id_fecha,fechayhora,tipo_fecha"
-            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-            valores = [id_fecha1, fecha_actual, 8]
-            hist = self.Insertar_bbdd(tabla, columnas, valores)
-            if hist == 1:
-                tabla = "historial"
-                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                historial_log = [id_historial, matricula_user, id_fecha1,str(cod_fam), 2, "telefono"]
-                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                if hist1 == 1:
-                    pass
+            enviar_datos = 8, str(cod_fam), 2, "telefono"
+            self.Registro_tabla_historial(enviar_datos)
             # endregion
         else:
             if datos[2]==1:
@@ -880,8 +761,6 @@ class Principal(QMainWindow):
                 QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar el teléfono de la madre")
 
     def Registrar_tel(self,datos):
-        global matricula_user
-        fecha_actual = datetime.datetime.today()
         tel=datos[0]
         id_familiar=datos[1]
         tabla = "telefono"
@@ -891,19 +770,8 @@ class Principal(QMainWindow):
         resp14 = self.Insertar_bbdd(tabla, columnas, valores)
         if resp14 == 1:
             # region registro en la tabla historial
-            tabla = "fecha"
-            columnas = "id_fecha,fechayhora,tipo_fecha"
-            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-            valores = [id_fecha1, fecha_actual, 7]
-            hist = self.Insertar_bbdd(tabla, columnas, valores)
-            if hist == 1:
-                tabla = "historial"
-                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                id_historial = self.Conseguir_id_tabla(1, "id_historial",tabla)
-                historial_log = [id_historial, matricula_user, id_fecha1,str(id_tel), 1, "telefono"]
-                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                if hist1 == 1:
-                    pass
+            enviar_datos = 7, str(id_tel), 1, "telefono"
+            self.Registro_tabla_historial(enviar_datos)
             # endregion
         else:
             if datos[2]==1:
@@ -912,7 +780,6 @@ class Principal(QMainWindow):
                 QMessageBox.critical(self, "Mensaje de error", "No se pudo guardar el teléfono de la madre")
 
     def Registrar_Progenitor(self,caso,datos):
-        global matricula_user
         global bbdd_paciente
         global persona
         fecha_actual = datetime.datetime.today()
@@ -950,19 +817,8 @@ class Principal(QMainWindow):
         resp8 = self.Insertar_bbdd(tabla, columnas, valores)
         if resp8 == 1:
             # region registro en la tabla historial
-            tabla = "fecha"
-            columnas = "id_fecha,fechayhora,tipo_fecha"
-            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-            valores = [id_fecha1, fecha_actual, 7]
-            hist = self.Insertar_bbdd(tabla, columnas, valores)
-            if hist == 1:
-                tabla = "historial"
-                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                historial_log = [id_historial, matricula_user, id_fecha1, str(id_fecha), 1, 'fecha']
-                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                if hist1 == 1:
-                    pass
+            enviar_datos = 7, str(id_fecha), 1, "fecha"
+            self.Registro_tabla_historial(enviar_datos)
             # endregion
             id_persona = ""
             persona = [id_persona, nom, ap1, ap2, id_fecha, 1]
@@ -976,20 +832,8 @@ class Principal(QMainWindow):
                 resp10 = self.Insertar_bbdd(tabla, columnas, persona)
                 if resp10 == 1:
                     # region registro en la tabla historial
-                    tabla = "fecha"
-                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                    valores = [id_fecha1, fecha_actual, 7]
-                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                    if hist == 1:
-                        tabla = "historial"
-                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_persona),
-                                         1, 'persona']
-                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                        if hist1 == 1:
-                            pass
+                    enviar_datos = 7, str(id_persona), 1, "persona"
+                    self.Registro_tabla_historial(enviar_datos)
                     # endregion
                     if ci:
                         if caso==1:
@@ -1009,20 +853,8 @@ class Principal(QMainWindow):
                         resp13 = self.Insertar_bbdd(tabla, columnas, familiar)
                         if resp13 == 1:
                             # region registro en la tabla historial
-                            tabla = "fecha"
-                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                            valores = [id_fecha1, fecha_actual, 7]
-                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                            if hist == 1:
-                                tabla = "historial"
-                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                historial_log = [id_historial, matricula_user, id_fecha1,
-                                                 str(id_familiar), 1, "familiar"]
-                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                if hist1 == 1:
-                                    pass
+                            enviar_datos = 7, str(id_familiar), 1, "familiar"
+                            self.Registro_tabla_historial(enviar_datos)
                             # endregion
                             if tel:
                                 if caso==1:
@@ -1104,10 +936,8 @@ class Principal(QMainWindow):
                     self.Actualiza_tel(enviar)
 
     def Verificar_Progenitor(self,caso,datos):
-        global matricula_user
         global bbdd_padre
         global bbdd_madre
-        fecha_actual = datetime.datetime.today()
         if caso==1:
             nom=datos[18]
             ap1=datos[19]
@@ -1136,19 +966,8 @@ class Principal(QMainWindow):
             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
             if resp == 1:
                 # region registro en la tabla historial
-                tabla = "fecha"
-                columnas = "id_fecha,fechayhora,tipo_fecha"
-                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                valores = [id_fecha1, fecha_actual, 8]
-                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                if hist == 1:
-                    tabla = "historial"
-                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_per_fam), 2,"persona"]
-                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                    if hist1 == 1:
-                        pass
+                enviar_datos = 8, str(cod_per_fam), 2, "persona"
+                self.Registro_tabla_historial(enviar_datos)
                 # endregion
                 self.Verifica_ci_tel_Progenitor(enviar)
         else:
@@ -1222,8 +1041,6 @@ class Principal(QMainWindow):
 
     def Verificar2(self,datos):
         global bbdd_paciente
-        global matricula_user
-        fecha_actual = datetime.datetime.today()
         fecha_pac1=datos[6]
         fecha_pac_bd = bbdd_paciente[3]
         fecha_pac_bd = fecha_pac_bd.strftime('%Y-%m-%d')
@@ -1236,19 +1053,8 @@ class Principal(QMainWindow):
             resp3 = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
             if resp3 == 1:
                 # region registro en la tabla historial
-                tabla = "fecha"
-                columnas = "id_fecha,fechayhora,tipo_fecha"
-                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                valores = [id_fecha1, fecha_actual, 8]
-                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                if hist == 1:
-                    tabla = "historial"
-                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_fecha_pac), 2, "fecha"]
-                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                    if hist1 == 1:
-                        pass
+                enviar_datos = 8, str(cod_fecha_pac), 2, "fecha"
+                self.Registro_tabla_historial(enviar_datos)
                 # endregion
             else:
                 QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar su fecha de nacimiento")
@@ -1258,13 +1064,11 @@ class Principal(QMainWindow):
 
     def Verificar3(self,datos):
         global bbdd_paciente
-        global matricula_user
         peso_pac=datos[10]
         talla_pac=datos[11]
         peso_pac_bd = float(bbdd_paciente[11])
         talla_pac_bd = float(bbdd_paciente[12])
         cod_dat_pac = bbdd_paciente[15]
-        fecha_actual = datetime.datetime.today()
         if peso_pac != peso_pac_bd or talla_pac != talla_pac_bd:
             tabla = "dato_general"
             columnas = "peso", "talla"
@@ -1273,19 +1077,8 @@ class Principal(QMainWindow):
             resp2 = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
             if resp2 == 1:
                 # region registro en la tabla historial
-                tabla = "fecha"
-                columnas = "id_fecha,fechayhora,tipo_fecha"
-                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                valores = [id_fecha1, fecha_actual, 8]
-                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                if hist == 1:
-                    tabla = "historial"
-                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_dat_pac), 2, "dato_general"]
-                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                    if hist1 == 1:
-                        pass
+                enviar_datos = 8, str(cod_dat_pac), 2, "dato_general"
+                self.Registro_tabla_historial(enviar_datos)
                 # endregion
             else:
                 QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar los cambios\n "
@@ -1296,7 +1089,6 @@ class Principal(QMainWindow):
 
     def Verificar4(self,datos):
         global bbdd_paciente
-        global matricula_user
         grupo_pac=datos[9]
         factor_pac=datos[8]
         procedencia=datos[14]
@@ -1310,7 +1102,6 @@ class Principal(QMainWindow):
         direccion_bd = bbdd_paciente[9]
         barrio_bd = bbdd_paciente[10]
         cod_pac = bbdd_paciente[13]
-        fecha_actual = datetime.datetime.today()
         if grupo_pac != grupo_pac_bd or factor_pac != factor_pac_bd or procedencia != procedencia_bd or residencia != residencia_bd or direccion != direccion_bd \
                 or barrio != barrio_bd:
             tabla = "paciente"
@@ -1320,19 +1111,8 @@ class Principal(QMainWindow):
             resp1 = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
             if resp1 == 1:
                 # region registro en la tabla historial
-                tabla = "fecha"
-                columnas = "id_fecha,fechayhora,tipo_fecha"
-                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                valores = [id_fecha1, fecha_actual, 8]
-                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                if hist == 1:
-                    tabla = "historial"
-                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_pac), 2, "paciente"]
-                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                    if hist1 == 1:
-                        pass
+                enviar_datos = 8, str(cod_pac), 2, "paciente"
+                self.Registro_tabla_historial(enviar_datos)
                 # endregion
             else:
                 QMessageBox.critical(self, "Mensaje de error","No se pudo actualizar:\n"
@@ -1348,7 +1128,6 @@ class Principal(QMainWindow):
 
     def Verificar5(self, datos):
         global bbdd_paciente
-        global matricula_user
         nom_pac_bd = bbdd_paciente[0]
         ap1_pac_bd = bbdd_paciente[1]
         ap2_pac_bd = bbdd_paciente[2]
@@ -1358,7 +1137,6 @@ class Principal(QMainWindow):
         ap2_pac=datos[2]
         sexo_pac=datos[7]
         cod_per_pac=bbdd_paciente[14]
-        fecha_actual = datetime.datetime.today()
         if nom_pac != nom_pac_bd or ap1_pac != ap1_pac_bd or ap2_pac != ap2_pac_bd or sexo_pac != sexo_pac_bd:
             tabla = "persona"
             columnas = "nombre", "apellido1", "apellido2", "tipo_sexo"
@@ -1367,19 +1145,8 @@ class Principal(QMainWindow):
             resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
             if resp == 1:
                 # region registro en la tabla historial
-                tabla = "fecha"
-                columnas = "id_fecha,fechayhora,tipo_fecha"
-                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                valores = [id_fecha1, fecha_actual, 8]
-                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                if hist == 1:
-                    tabla = "historial"
-                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                    historial_log = [id_historial, matricula_user, id_fecha1, str(cod_per_pac), 2, "persona"]
-                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                    if hist1 == 1:
-                        pass
+                enviar_datos = 8, str(cod_per_pac), 2, "persona"
+                self.Registro_tabla_historial(enviar_datos)
                 # endregion
             else:
                 QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar los datos:\n"
@@ -1413,7 +1180,6 @@ class Principal(QMainWindow):
         diagnos = self.ui.pt_hist_pac_diag.toPlainText()
         trat = self.ui.pt_hist_pac_trat.toPlainText()
         obs = self.ui.pt_hist_pac_obs.toPlainText()
-        fecha_actual = datetime.datetime.today()
         prox=self.ui.spin_hist_pac_dat.date()
         if combo==0:
             QMessageBox.critical(self,"Mensaje de error","Debe registrar por lo menos el tipo de consulta")
@@ -1478,19 +1244,8 @@ class Principal(QMainWindow):
             resp = self.Insertar_bbdd(tabla, columnas, valores)
             if resp == 1:
                 # region registro en la tabla historial
-                tabla = "fecha"
-                columnas = "id_fecha,fechayhora,tipo_fecha"
-                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                valores = [id_fecha1, fecha_actual, 7]
-                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                if hist == 1:
-                    tabla = "historial"
-                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_fecha), 1, "fecha"]
-                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                    if hist1 == 1:
-                        pass
+                enviar_datos = 7, str(id_fecha), 1, "fecha"
+                self.Registro_tabla_historial(enviar_datos)
                 # endregion
                 tabla = "dato_general"
                 columnas = "id_dato,peso,talla"
@@ -1499,19 +1254,8 @@ class Principal(QMainWindow):
                 resp2 = self.Insertar_bbdd(tabla, columnas, valores)
                 if resp2 == 1:
                     # region registro en la tabla historial
-                    tabla = "fecha"
-                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                    valores = [id_fecha1, fecha_actual, 7]
-                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                    if hist == 1:
-                        tabla = "historial"
-                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_dato), 1, 'dato_general']
-                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                        if hist1 == 1:
-                            pass
+                    enviar_datos = 7, str(id_dato), 1, "dato_general"
+                    self.Registro_tabla_historial(enviar_datos)
                     # endregion
                     resp3 = self.Verifica_id_crea_id(4, id_consulta)
                     if resp3[0] == 1:
@@ -1523,19 +1267,8 @@ class Principal(QMainWindow):
                         resp4 = self.Insertar_bbdd(tabla, columnas, consulta)
                         if resp4==1:
                             # region registro en la tabla historial
-                            tabla = "fecha"
-                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                            valores = [id_fecha1, fecha_actual, 7]
-                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                            if hist == 1:
-                                tabla = "historial"
-                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_consulta), 1, 'consulta']
-                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                if hist1 == 1:
-                                    pass
+                            enviar_datos = 7, str(id_consulta), 1, "consulta"
+                            self.Registro_tabla_historial(enviar_datos)
                             # endregion
                             QMessageBox.information(self,"Mensaje de éxito","La consulta fue guardada con éxito en la Base de datos")
                             self.ui.Stacked_main.setCurrentIndex(5)
@@ -1628,7 +1361,6 @@ class Principal(QMainWindow):
         global tema
         global usuario
         global matricula_user
-        fecha_actual=datetime.datetime.today()
         columna = "tema"
         tabla = "usuario"
         valor = "cuenta_user", usuario
@@ -1652,19 +1384,8 @@ class Principal(QMainWindow):
             if resultado[0] == 1:
                 matricula_user = resultado[1]
                 # region registro en la tabla historial
-                tabla = "fecha"
-                columnas = "id_fecha,fechayhora,tipo_fecha"
-                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                valores = [id_fecha1, fecha_actual, 5]
-                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                if hist == 1:
-                    tabla = "historial"
-                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                    historial_log = [id_historial, matricula_user, id_fecha1, "Inicio de sesión", 4, "Entra al sistema"]
-                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                    if hist1 == 1:
-                        pass
+                enviar_datos = 5, "Inicio de sesión", 4, "Entra al sistema"
+                self.Registro_tabla_historial(enviar_datos)
                 # endregion
                 self.ui.Stacked_tareas.setCurrentIndex(2)
                 self.ui.Stacked_main.setCurrentIndex(5)
@@ -1678,7 +1399,6 @@ class Principal(QMainWindow):
         global usuario1
         global medico
         global resultado_bbdd_usuario
-        global matricula_user
         fecha2 = datetime.datetime.today()
         #tabla carnet debe ir llena, todos los campos son obligatorios
         carnet=[self.ui.txt_reg_user_CI.text(),self.ui.cb_reg_user_CI.currentIndex()]
@@ -1818,19 +1538,8 @@ class Principal(QMainWindow):
                     resp=self.Update_bbdd(2,tabla,columnas,id_tabla,valores)
                     if resp==1:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha2, 8]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            historial_log = [id_historial, matricula_user, id_fecha1, str(resultado_bbdd_usuario[2]), 2, "carnet"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        enviar_datos = 8, str(resultado_bbdd_usuario[2]), 2, "carnet"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                     else:
                         QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet")
@@ -1842,19 +1551,8 @@ class Principal(QMainWindow):
                         resp1 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                         if resp1==1:
                             # region registro en la tabla historial
-                            tabla = "fecha"
-                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                            valores = [id_fecha1, fecha2, 8]
-                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                            if hist == 1:
-                                tabla = "historial"
-                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                historial_log = [id_historial, matricula_user, id_fecha1, str(resultado_bbdd_usuario[1]), 2, "persona"]
-                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                if hist1 == 1:
-                                    pass
+                            enviar_datos = 8, str(resultado_bbdd_usuario[1]), 2, "persona"
+                            self.Registro_tabla_historial(enviar_datos)
                             # endregion
                         else:
                             QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar los datos personales")
@@ -1869,19 +1567,8 @@ class Principal(QMainWindow):
                                 resp2 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                 if resp2 == 1:
                                     # region registro en la tabla historial
-                                    tabla = "fecha"
-                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                    valores = [id_fecha1, fecha2, 8]
-                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                    if hist == 1:
-                                        tabla = "historial"
-                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                        historial_log = [id_historial, matricula_user, id_fecha1, str(resultado_bbdd_usuario[0]), 2, "medico"]
-                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                        if hist1 == 1:
-                                            pass
+                                    enviar_datos = 8, str(resultado_bbdd_usuario[0]), 2, "medico"
+                                    self.Registro_tabla_historial(enviar_datos)
                                     # endregion
                                     tabla = "validaciones"
                                     columnas = "codigo", "validacion"
@@ -1890,19 +1577,8 @@ class Principal(QMainWindow):
                                     resp3 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                     if resp3 == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha2, 8]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(resultado_bbdd_usuario[3]), 2, "validaciones"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 8, str(resultado_bbdd_usuario[3]), 2, "validaciones"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         QMessageBox.information(self, "Mensaje de éxito", "Se ha actualizado con éxito el correo\n"
                                                                                           "Se le ha enviado un nuevo código de confirmación\n"
@@ -1918,19 +1594,8 @@ class Principal(QMainWindow):
                                 resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                 if resp == 1:
                                     # region registro en la tabla historial
-                                    tabla = "fecha"
-                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                    valores = [id_fecha1, fecha2, 8]
-                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                    if hist == 1:
-                                        tabla = "historial"
-                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                        historial_log = [id_historial, matricula_user, id_fecha1, str(usuario), 2, "usuario"]
-                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                        if hist1 == 1:
-                                            pass
+                                    enviar_datos = 8, str(usuario), 2, "usuario"
+                                    self.Registro_tabla_historial(enviar_datos)
                                     # endregion
                                     resp1 = self.Reset_pass(2, usuario, contra1)
                                     if resp1 == 1:
@@ -1955,19 +1620,8 @@ class Principal(QMainWindow):
                                 resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                 if resp == 1:
                                     # region registro en la tabla historial
-                                    tabla = "fecha"
-                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                    valores = [id_fecha1, fecha2, 8]
-                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                    if hist == 1:
-                                        tabla = "historial"
-                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                        historial_log = [id_historial, matricula_user, id_fecha1, str(usuario), 2, "usuario"]
-                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                        if hist1 == 1:
-                                            pass
+                                    enviar_datos = 8, str(usuario), 2, "usuario"
+                                    self.Registro_tabla_historial(enviar_datos)
                                     # endregion
                                     resp1 = self.Reset_pass(2, usuario, contra1)
                                     if resp1 == 1:
@@ -1994,19 +1648,8 @@ class Principal(QMainWindow):
                                 resp2 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                 if resp2 == 1:
                                     # region registro en la tabla historial
-                                    tabla = "fecha"
-                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                    valores = [id_fecha1, fecha2, 8]
-                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                    if hist == 1:
-                                        tabla = "historial"
-                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                        historial_log = [id_historial, matricula_user, id_fecha1, str(resultado_bbdd_usuario[0]), 2, "medico"]
-                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                        if hist1 == 1:
-                                            pass
+                                    enviar_datos = 8, str(resultado_bbdd_usuario[0]), 2, "medico"
+                                    self.Registro_tabla_historial(enviar_datos)
                                     # endregion
                                     tabla = "validaciones"
                                     columnas = "codigo", "validacion"
@@ -2015,19 +1658,8 @@ class Principal(QMainWindow):
                                     resp3 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                     if resp3 == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha2, 8]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(resultado_bbdd_usuario[3]), 2, "validaciones"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 8, str(resultado_bbdd_usuario[3]), 2, "validaciones"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         QMessageBox.information(self, "Mensaje de éxito", "Se ha actualizado con éxito el correo\n"
                                                                                           "Se le ha enviado un nuevo código de confirmación\n"
@@ -2043,19 +1675,8 @@ class Principal(QMainWindow):
                                 resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                 if resp == 1:
                                     # region registro en la tabla historial
-                                    tabla = "fecha"
-                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                    valores = [id_fecha1, fecha2, 8]
-                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                    if hist == 1:
-                                        tabla = "historial"
-                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                        historial_log = [id_historial, matricula_user, id_fecha1, str(usuario), 2, "usuario"]
-                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                        if hist1 == 1:
-                                            pass
+                                    enviar_datos = 8, str(usuario), 2, "usuario"
+                                    self.Registro_tabla_historial(enviar_datos)
                                     # endregion
                                     resp1 = self.Reset_pass(2, usuario, contra1)
                                     if resp1 == 1:
@@ -2080,19 +1701,8 @@ class Principal(QMainWindow):
                                 resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                 if resp == 1:
                                     # region registro en la tabla historial
-                                    tabla = "fecha"
-                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                    valores = [id_fecha1, fecha2, 8]
-                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                    if hist == 1:
-                                        tabla = "historial"
-                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                        historial_log = [id_historial, matricula_user, id_fecha1, str(usuario), 2, "usuario"]
-                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                        if hist1 == 1:
-                                            pass
+                                    enviar_datos = 8, str(usuario), 2, "usuario"
+                                    self.Registro_tabla_historial(enviar_datos)
                                     # endregion
                                     resp1 = self.Reset_pass(2, usuario, contra1)
                                     if resp1 == 1:
@@ -2116,19 +1726,8 @@ class Principal(QMainWindow):
                         resp1=self.Update_bbdd(2,tabla,columnas,id_tabla,valores)
                         if resp1==1:
                             # region registro en la tabla historial
-                            tabla = "fecha"
-                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                            valores = [id_fecha1, fecha2, 8]
-                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                            if hist == 1:
-                                tabla = "historial"
-                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                historial_log = [id_historial, matricula_user, id_fecha1, str(resultado_bbdd_usuario[1]), 2, "persona"]
-                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                if hist1 == 1:
-                                    pass
+                            enviar_datos = 8, str(resultado_bbdd_usuario[1]), 2, "persona"
+                            self.Registro_tabla_historial(enviar_datos)
                             # endregion
                         else:
                             QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar los datos personales")
@@ -2143,19 +1742,8 @@ class Principal(QMainWindow):
                                 resp2 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                 if resp2 == 1:
                                     # region registro en la tabla historial
-                                    tabla = "fecha"
-                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                    valores = [id_fecha1, fecha2, 8]
-                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                    if hist == 1:
-                                        tabla = "historial"
-                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                        historial_log = [id_historial, matricula_user, id_fecha1, str(resultado_bbdd_usuario[0]), 2, "medico"]
-                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                        if hist1 == 1:
-                                            pass
+                                    enviar_datos = 8, str(resultado_bbdd_usuario[0]), 2, "medico"
+                                    self.Registro_tabla_historial(enviar_datos)
                                     # endregion
                                     tabla = "validaciones"
                                     columnas = "codigo", "validacion"
@@ -2164,19 +1752,8 @@ class Principal(QMainWindow):
                                     resp3 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                     if resp3 == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha2, 8]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(resultado_bbdd_usuario[3]), 2, "validaciones"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 8, str(resultado_bbdd_usuario[3]), 2, "validaciones"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         QMessageBox.information(self, "Mensaje de éxito", "Se ha actualizado con éxito el correo\n"
                                                                                           "Se le ha enviado un nuevo código de confirmación\n"
@@ -2192,19 +1769,8 @@ class Principal(QMainWindow):
                                 resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                 if resp == 1:
                                     # region registro en la tabla historial
-                                    tabla = "fecha"
-                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                    valores = [id_fecha1, fecha2, 8]
-                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                    if hist == 1:
-                                        tabla = "historial"
-                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                        historial_log = [id_historial, matricula_user, id_fecha1, str(usuario), 2, "usuario"]
-                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                        if hist1 == 1:
-                                            pass
+                                    enviar_datos = 8, str(usuario), 2, "usuario"
+                                    self.Registro_tabla_historial(enviar_datos)
                                     # endregion
                                     resp1 = self.Reset_pass(2, usuario, contra1)
                                     if resp1 == 1:
@@ -2229,19 +1795,8 @@ class Principal(QMainWindow):
                                 resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                 if resp == 1:
                                     # region registro en la tabla historial
-                                    tabla = "fecha"
-                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                    valores = [id_fecha1, fecha2, 8]
-                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                    if hist == 1:
-                                        tabla = "historial"
-                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                        historial_log = [id_historial, matricula_user, id_fecha1, str(usuario), 2, "usuario"]
-                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                        if hist1 == 1:
-                                            pass
+                                    enviar_datos = 8, str(usuario), 2, "usuario"
+                                    self.Registro_tabla_historial(enviar_datos)
                                     # endregion
                                     resp1 = self.Reset_pass(2, usuario, contra1)
                                     if resp1 == 1:
@@ -2268,19 +1823,8 @@ class Principal(QMainWindow):
                                 resp2 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                 if resp2 == 1:
                                     # region registro en la tabla historial
-                                    tabla = "fecha"
-                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                    valores = [id_fecha1, fecha2, 8]
-                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                    if hist == 1:
-                                        tabla = "historial"
-                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                        historial_log = [id_historial, matricula_user, id_fecha1, str(resultado_bbdd_usuario[0]), 2, "medico"]
-                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                        if hist1 == 1:
-                                            pass
+                                    enviar_datos = 8, str(resultado_bbdd_usuario[0]), 2, "medico"
+                                    self.Registro_tabla_historial(enviar_datos)
                                     # endregion
                                     tabla = "validaciones"
                                     columnas = "codigo", "validacion"
@@ -2289,19 +1833,8 @@ class Principal(QMainWindow):
                                     resp3 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                     if resp3 == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha2, 8]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(resultado_bbdd_usuario[3]), 2, "validaciones"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 8, str(resultado_bbdd_usuario[3]), 2, "validaciones"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         QMessageBox.information(self, "Mensaje de éxito", "Se ha actualizado con éxito el correo\n"
                                                                                           "Se le ha enviado un nuevo código de confirmación\n"
@@ -2317,19 +1850,8 @@ class Principal(QMainWindow):
                                 resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                 if resp == 1:
                                     # region registro en la tabla historial
-                                    tabla = "fecha"
-                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                    valores = [id_fecha1, fecha2, 8]
-                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                    if hist == 1:
-                                        tabla = "historial"
-                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                        historial_log = [id_historial, matricula_user, id_fecha1, str(usuario), 2, "usuario"]
-                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                        if hist1 == 1:
-                                            pass
+                                    enviar_datos = 8, str(usuario), 2, "usuario"
+                                    self.Registro_tabla_historial(enviar_datos)
                                     # endregion
                                     resp1 = self.Reset_pass(2, usuario, contra1)
                                     if resp1 == 1:
@@ -2354,19 +1876,8 @@ class Principal(QMainWindow):
                                 resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
                                 if resp == 1:
                                     # region registro en la tabla historial
-                                    tabla = "fecha"
-                                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                    valores = [id_fecha1, fecha2, 8]
-                                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                    if hist == 1:
-                                        tabla = "historial"
-                                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                        historial_log = [id_historial, matricula_user, id_fecha1, str(usuario), 2, "usuario"]
-                                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                        if hist1 == 1:
-                                            pass
+                                    enviar_datos = 8, str(usuario), 2, "usuario"
+                                    self.Registro_tabla_historial(enviar_datos)
                                     # endregion
                                     resp1 = self.Reset_pass(2, usuario, contra1)
                                     if resp1 == 1:
@@ -2488,8 +1999,6 @@ class Principal(QMainWindow):
         global nom
         global ape1
         global ape2
-        global matricula_user
-        fecha_actual=datetime.datetime.today()
         if caso == 1:
             nom = self.ui.txt_admin_nombre.text()
             ape1 = self.ui.txt_admin_app1.text()
@@ -2573,20 +2082,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon="busqueda paciente: {}".format(nom)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {}".format(nom)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(2, resultado)
                 if ape1 and not nom and not ape2:
@@ -2597,20 +2095,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon = "busqueda paciente: {}".format(ape1)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {}".format(ape1)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(2, resultado)
                 if ape2 and not nom and not ape1:
@@ -2621,20 +2108,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon = "busqueda paciente: {}".format(ape2)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {}".format(ape2)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(2, resultado)
                 if nom and ape1 and not ape2:
@@ -2646,20 +2122,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon = "busqueda paciente: {} {}".format(nom,ape1)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {} {}".format(nom,ape1)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(2, resultado)
                 if nom and ape2 and not ape1:
@@ -2671,20 +2136,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon = "busqueda paciente: {} {}".format(nom, ape2)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {} {}".format(nom, ape2)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(2, resultado)
                 if ape1 and ape2 and not nom:
@@ -2696,20 +2150,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon = "busqueda paciente: {} {}".format(ape1,ape2)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {} {}".format(ape1,ape2)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(2, resultado)
                 if nom and ape1 and ape2:
@@ -2722,20 +2165,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon = "busqueda paciente: {} {} {}".format(nom, ape1,ape2)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {} {} {}".format(nom, ape1,ape2)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(2, resultado)
         if caso == 3:
@@ -2753,20 +2185,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon = "busqueda paciente: {}".format(nom)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {}".format(nom)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(3, resultado)
                 if ape1 and not nom and not ape2:
@@ -2777,20 +2198,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon = "busqueda paciente: {}".format(ape1)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {}".format(ape1)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(3, resultado)
                 if ape2 and not nom and not ape1:
@@ -2801,20 +2211,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon = "busqueda paciente: {}".format(ape2)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {}".format(ape2)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(3, resultado)
                 if nom and ape1 and not ape2:
@@ -2826,20 +2225,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon = "busqueda paciente: {} {}".format(nom,ape1)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {} {}".format(nom,ape1)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(3, resultado)
                 if nom and ape2 and not ape1:
@@ -2851,20 +2239,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon = "busqueda paciente: {} {}".format(nom, ape2)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {} {}".format(nom, ape2)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(3, resultado)
                 if ape1 and ape2 and not nom:
@@ -2876,20 +2253,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon = "busqueda paciente: {} {}".format(ape1,ape2)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {} {}".format(ape1,ape2)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(3, resultado)
                 if nom and ape1 and ape2:
@@ -2902,20 +2268,9 @@ class Principal(QMainWindow):
                         QMessageBox.critical(self, "Mensaje de error", mensaje)
                     else:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            razon = "busqueda paciente: {} {} {}".format(nom, ape1,ape2)
-                            historial_log = [id_historial, matricula_user, id_fecha1, razon, 3, "persona,consulta,fecha"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        razon = "busqueda paciente: {} {} {}".format(nom, ape1,ape2)
+                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.Datos_tabla(3, resultado)
     #endregion
@@ -2966,8 +2321,6 @@ class Principal(QMainWindow):
     #endregion
     #region Calculo de la edad
     def Verifica_edad(self):
-        global matricula_user
-        fecha_actual=datetime.datetime.today()
         id_tabla = str(self.ui.lbl_hist_pac_codigo.text())
         columna = "id_persona"
         tabla = "paciente"
@@ -2975,19 +2328,8 @@ class Principal(QMainWindow):
         resp = self.Select_bbdd(columna,tabla,valor)
         if resp[0]==1:
             # region registro en la tabla historial
-            tabla = "fecha"
-            columnas = "id_fecha,fechayhora,tipo_fecha"
-            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-            valores = [id_fecha1, fecha_actual, 9]
-            hist = self.Insertar_bbdd(tabla, columnas, valores)
-            if hist == 1:
-                tabla = "historial"
-                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                historial_log = [id_historial, matricula_user, id_fecha1, str(id_tabla), 3, "paciente"]
-                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                if hist1 == 1:
-                    pass
+            enviar_datos = 9, str(id_tabla), 3, "paciente"
+            self.Registro_tabla_historial(enviar_datos)
             # endregion
             id_tabla =resp[1]
             columna = "fecha"
@@ -2996,19 +2338,8 @@ class Principal(QMainWindow):
             resp1 = self.Select_bbdd(columna, tabla, valor)
             if resp1[0]==1:
                 # region registro en la tabla historial
-                tabla = "fecha"
-                columnas = "id_fecha,fechayhora,tipo_fecha"
-                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                valores = [id_fecha1, fecha_actual, 9]
-                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                if hist == 1:
-                    tabla = "historial"
-                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                    historial_log = [id_historial, matricula_user, id_fecha1, str(id_tabla), 3, "persona"]
-                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                    if hist1 == 1:
-                        pass
+                enviar_datos = 9, str(id_tabla), 3, "persona"
+                self.Registro_tabla_historial(enviar_datos)
                 # endregion
                 id_tabla = resp1[1]
                 columna = "fechayhora"
@@ -3017,19 +2348,8 @@ class Principal(QMainWindow):
                 resp2 = self.Select_bbdd(columna, tabla, valor)
                 if resp2[0]==1:
                     # region registro en la tabla historial
-                    tabla = "fecha"
-                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                    valores = [id_fecha1, fecha_actual, 9]
-                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                    if hist == 1:
-                        tabla = "historial"
-                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                        historial_log = [id_historial, matricula_user, id_fecha1, str(id_tabla), 3, "fecha"]
-                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                        if hist1 == 1:
-                            pass
+                    enviar_datos = 9, str(id_tabla), 3, "fecha"
+                    self.Registro_tabla_historial(enviar_datos)
                     # endregion
                     fecha1=resp2[1]
         if self.ui.tab_fecha_hora.currentIndex() == 0:
@@ -3502,7 +2822,6 @@ class Principal(QMainWindow):
         reg_us = 0
         x = 0
         self.ui.Stacked_main.setCurrentIndex(5)
-
     # endregion
 
     # ----------------------------------------------------------------------------------------
@@ -3528,8 +2847,6 @@ class Principal(QMainWindow):
         tema1 = self.ui.cb_config_tema.currentIndex()
         global tema
         global usuario
-        global matricula_user
-        fecha_actual=datetime.datetime.today()
         if tema1 == 0:
             QMessageBox.critical(self, "Mensaje de error", "Debe seleccionar al menos una opcion para tener el tema")
         else:
@@ -3542,19 +2859,8 @@ class Principal(QMainWindow):
             tema = tema1
             if resp==1:
                 # region registro en la tabla historial
-                tabla = "fecha"
-                columnas = "id_fecha,fechayhora,tipo_fecha"
-                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                valores = [id_fecha1, fecha_actual, 8]
-                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                if hist == 1:
-                    tabla = "historial"
-                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                    historial_log = [id_historial, matricula_user, id_fecha1, str(usuario), 2, "usuario"]
-                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                    if hist1 == 1:
-                        pass
+                enviar_datos = 8, str(usuario), 2, "usuario"
+                self.Registro_tabla_historial(enviar_datos)
                 # endregion
             else:
                 QMessageBox.critical(self,"Mensaje de error","Algo salió mal, no se pudo guardar el tema que eligió\n"
@@ -4393,12 +3699,14 @@ class Principal(QMainWindow):
     # endregion
     # region sobreescribir evento de presionar enter
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Return:
+        if event.key() == Qt.Key_Return or event.key() == Qt.Key_Enter:
             wfocus = QApplication.focusWidget()  # obtenemos el widget que tiene el focus
             if wfocus in self.les:  # verificamos que se encuentre en la lista
                 ix = self.les.index(wfocus)  # obtenemos el indice del QLineEdit
                 if ix != len(self.les) - 1:  # cambiamos el focus si no es el ultimo
                     self.les[ix + 1].setFocus()
+            if wfocus ==self.ui.btn_log_iniciar:
+                self.Verifica()
         QMainWindow.keyPressEvent(self, event)
 
     # endregion
@@ -4758,7 +4066,6 @@ class Principal(QMainWindow):
     def Seleccionar_item_tabla(self,caso):
         global x
         global reg_pac
-        global matricula_user
         global datos_paciente
         global html
         global fecha_nac1
@@ -4771,7 +4078,6 @@ class Principal(QMainWindow):
         global bbdd_carnet_madre
         global bbdd_tel1
         global bbdd_tel2
-        fecha_actual=datetime.datetime.today()
         if caso ==1:
             elegida = self.ui.Tabla_admin_user.selectedItems()
             if elegida:
@@ -4828,37 +4134,15 @@ class Principal(QMainWindow):
                     resp1 = self.Select_bbdd("patologicos", "antecedentes", valor)
                     if resp1[0] == 1:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            historial_log = [id_historial, matricula_user, id_fecha1, str(codigo), 3, "antecedentes"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        enviar_datos = 9, str(codigo), 3, "antecedentes"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         patologicos = resp1[1]
                         resp2=self.Select_bbdd("alergias", "antecedentes", valor)
                         if resp2[0]==1:
                             # region registro en la tabla historial
-                            tabla = "fecha"
-                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                            valores = [id_fecha1, fecha_actual, 9]
-                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                            if hist == 1:
-                                tabla = "historial"
-                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                historial_log = [id_historial, matricula_user, id_fecha1, str(codigo), 3, "antecedentes"]
-                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                if hist1 == 1:
-                                    pass
+                            enviar_datos = 9, str(codigo), 3, "antecedentes"
+                            self.Registro_tabla_historial(enviar_datos)
                             # endregion
                             alergias=resp2[1]
                             datos = (nombre, codigo, patologicos, alergias)
@@ -4879,19 +4163,8 @@ class Principal(QMainWindow):
                         datos = resp[1]
                         bbdd_paciente=datos
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            historial_log = [id_historial, matricula_user, id_fecha1, str(codigo_paciente), 3, "paciente,persona"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        enviar_datos = 9, str(codigo_paciente), 3, "paciente, persona"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         self.ui.txt_reg_pac_nom.setText(datos[0])
                         self.ui.txt_reg_pac_app1.setText(datos[1])
@@ -4912,19 +4185,8 @@ class Principal(QMainWindow):
                         resp1 = self.Buscar_datos_paciente(2, codigo_paciente)
                         if resp1[0] == 1:
                             # region registro en la tabla historial
-                            tabla = "fecha"
-                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                            valores = [id_fecha1, fecha_actual, 9]
-                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                            if hist == 1:
-                                tabla = "historial"
-                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                historial_log = [id_historial, matricula_user, id_fecha1, str(codigo_paciente), 3, "antecedentes"]
-                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                if hist1 == 1:
-                                    pass
+                            enviar_datos = 9, str(codigo_paciente), 3, "antecedentes"
+                            self.Registro_tabla_historial(enviar_datos)
                             # endregion
                             datos = resp1[1]
                             bbdd_antec_pac=datos
@@ -4936,19 +4198,8 @@ class Principal(QMainWindow):
                         if resp2[0] == 1:
                             if resp2[1] != None:
                                 # region registro en la tabla historial
-                                tabla = "fecha"
-                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                valores = [id_fecha1, fecha_actual, 9]
-                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                if hist == 1:
-                                    tabla = "historial"
-                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                    historial_log = [id_historial, matricula_user, id_fecha1, str(codigo_paciente), 3, "carnet"]
-                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                    if hist1 == 1:
-                                        pass
+                                enviar_datos = 9, str(codigo_paciente), 3, "carnet"
+                                self.Registro_tabla_historial(enviar_datos)
                                 # endregion
                                 datos = resp2[1]
                                 bbdd_carnet_pac=datos
@@ -4961,19 +4212,8 @@ class Principal(QMainWindow):
                         resp3 = self.Buscar_datos_paciente(4, codigo_paciente)
                         if resp3[0] == 1:
                             # region registro en la tabla historial
-                            tabla = "fecha"
-                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                            valores = [id_fecha1, fecha_actual, 9]
-                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                            if hist == 1:
-                                tabla = "historial"
-                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                historial_log = [id_historial, matricula_user, id_fecha1, str(codigo_paciente), 3, "familiar"]
-                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                if hist1 == 1:
-                                    pass
+                            enviar_datos = 9, str(codigo_paciente), 3, "familiar"
+                            self.Registro_tabla_historial(enviar_datos)
                             # endregion
                             datos = resp3[1]
                             if len(datos) > 1:
@@ -5002,19 +4242,8 @@ class Principal(QMainWindow):
                                     if resp4[0] == 1:
                                         if resp4[1] != None:
                                             # region registro en la tabla historial
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha1, fecha_actual, 9]
-                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if hist == 1:
-                                                tabla = "historial"
-                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "carnet"]
-                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                if hist1 == 1:
-                                                    pass
+                                            enviar_datos = 9, str(id_fam1), 3, "carnet"
+                                            self.Registro_tabla_historial(enviar_datos)
                                             # endregion
                                             datos = resp4[1]
                                             bbdd_carnet_padre=datos
@@ -5028,19 +4257,8 @@ class Principal(QMainWindow):
                                     if resp5[0] == 1:
                                         if resp5[1] != None:
                                             # region registro en la tabla historial
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha1, fecha_actual, 9]
-                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if hist == 1:
-                                                tabla = "historial"
-                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam2), 3, "carnet"]
-                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                if hist1 == 1:
-                                                    pass
+                                            enviar_datos = 9, str(id_fam2), 3, "carnet"
+                                            self.Registro_tabla_historial(enviar_datos)
                                             # endregion
                                             datos = resp5[1]
                                             bbdd_carnet_madre=datos
@@ -5056,19 +4274,8 @@ class Principal(QMainWindow):
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha_actual, 9]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "telefono"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 9, str(id_fam1), 3, "telefono"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         bbdd_tel1=resp6[1]
                                         self.ui.txt_reg_pac_tel1.setText(str(resp6[1]))
@@ -5080,19 +4287,8 @@ class Principal(QMainWindow):
                                     resp7 = self.Select_bbdd(columna, tabla, valor)
                                     if resp7[0] == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha_actual, 9]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam2), 3, "telefono"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 9, str(id_fam2), 3, "telefono"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         bbdd_tel2=resp7[1]
                                         self.ui.txt_reg_pac_tel2.setText(str(resp7[1]))
@@ -5111,19 +4307,8 @@ class Principal(QMainWindow):
                                     if resp4[0] == 1:
                                         if resp4[1] != None:
                                             # region registro en la tabla historial
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha1, fecha_actual, 9]
-                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if hist == 1:
-                                                tabla = "historial"
-                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "carnet"]
-                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                if hist1 == 1:
-                                                    pass
+                                            enviar_datos = 9, str(id_fam1), 3, "carnet"
+                                            self.Registro_tabla_historial(enviar_datos)
                                             # endregion
                                             datos = resp4[1]
                                             bbdd_carnet_madre=datos
@@ -5137,19 +4322,8 @@ class Principal(QMainWindow):
                                     if resp5[0] == 1:
                                         if resp5[1] != None:
                                             # region registro en la tabla historial
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha1, fecha_actual, 9]
-                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if hist == 1:
-                                                tabla = "historial"
-                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam2), 3, "carnet"]
-                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                if hist1 == 1:
-                                                    pass
+                                            enviar_datos = 9, str(id_fam2), 3, "carnet"
+                                            self.Registro_tabla_historial(enviar_datos)
                                             # endregion
                                             datos = resp5[1]
                                             bbdd_carnet_padre=datos
@@ -5165,19 +4339,8 @@ class Principal(QMainWindow):
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha_actual, 9]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "telefono"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 9, str(id_fam1), 3, "telefono"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         bbdd_tel2=resp6[1]
                                         self.ui.txt_reg_pac_tel2.setText(str(resp6[1]))
@@ -5187,19 +4350,8 @@ class Principal(QMainWindow):
                                     resp7 = self.Select_bbdd(columna, tabla, valor)
                                     if resp7[0] == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha_actual, 9]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam2), 3, "telefono"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 9, str(id_fam2), 3, "telefono"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         bbdd_tel1=resp7[1]
                                         self.ui.txt_reg_pac_tel1.setText(str(resp7[1]))
@@ -5222,19 +4374,8 @@ class Principal(QMainWindow):
                                     if resp4[0] == 1:
                                         if resp4[1] != None:
                                             # region registro en la tabla historial
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha1, fecha_actual, 9]
-                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if hist == 1:
-                                                tabla = "historial"
-                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "carnet"]
-                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                if hist1 == 1:
-                                                    pass
+                                            enviar_datos = 9, str(id_fam1), 3, "carnet"
+                                            self.Registro_tabla_historial(enviar_datos)
                                             # endregion
                                             datos = resp4[1]
                                             bbdd_carnet_padre=datos
@@ -5253,19 +4394,8 @@ class Principal(QMainWindow):
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha_actual, 9]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "telefono"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 9, str(id_fam1), 3, "telefono"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         bbdd_tel1=resp6[1]
                                         bbdd_tel2=""
@@ -5283,19 +4413,8 @@ class Principal(QMainWindow):
                                     if resp4[0] == 1:
                                         if resp4[1] != None:
                                             # region registro en la tabla historial
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha1, fecha_actual, 9]
-                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if hist == 1:
-                                                tabla = "historial"
-                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "carnet"]
-                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                if hist1 == 1:
-                                                    pass
+                                            enviar_datos = 9, str(id_fam1), 3, "carnet"
+                                            self.Registro_tabla_historial(enviar_datos)
                                             # endregion
                                             datos = resp4[1]
                                             bbdd_carnet_madre=datos
@@ -5314,19 +4433,8 @@ class Principal(QMainWindow):
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha_actual, 9]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "telefono"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 9, str(id_fam1), 3, "telefono"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         bbdd_tel2=resp6[1]
                                         bbdd_tel1=""
@@ -5351,36 +4459,14 @@ class Principal(QMainWindow):
                 codigo_paciente1=seleccionada[0]
                 if datos_paciente:
                     # region registro en la tabla historial
-                    tabla = "fecha"
-                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                    valores = [id_fecha1, fecha_actual, 9]
-                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                    if hist == 1:
-                        tabla = "historial"
-                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                        historial_log = [id_historial, matricula_user, id_fecha1, codigo_paciente1, 3, "consultas,fecha"]
-                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                        if hist1 == 1:
-                            pass
+                    enviar_datos = 9, str(codigo_paciente1), 3, "consultas, fecha"
+                    self.Registro_tabla_historial(enviar_datos)
                     # endregion
                     resp = self.Buscar_datos_paciente(1, codigo_paciente1)
                     if resp[0] == 1:
                         # region registro en la tabla historial
-                        tabla = "fecha"
-                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                        valores = [id_fecha1, fecha_actual, 9]
-                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                        if hist == 1:
-                            tabla = "historial"
-                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                            historial_log = [id_historial, matricula_user, id_fecha1, str(codigo_paciente1), 3, "persona,paciente,dato_general"]
-                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                            if hist1 == 1:
-                                pass
+                        enviar_datos = 9, str(codigo_paciente1), 3, "persona, paciente, dato_general"
+                        self.Registro_tabla_historial(enviar_datos)
                         # endregion
                         datos = resp[1]
                         nombre = '{} {} {}'.format(datos[0], datos[1], datos[2])
@@ -5403,19 +4489,8 @@ class Principal(QMainWindow):
                         resp1 = self.Buscar_datos_paciente(2, codigo_paciente1)
                         if resp1[0] == 1:
                             # region registro en la tabla historial
-                            tabla = "fecha"
-                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                            valores = [id_fecha1, fecha_actual, 9]
-                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                            if hist == 1:
-                                tabla = "historial"
-                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                historial_log = [id_historial, matricula_user, id_fecha1, str(codigo_paciente1), 3, "antecedentes"]
-                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                if hist1 == 1:
-                                    pass
+                            enviar_datos = 9, str(codigo_paciente1), 3, "antecedentes"
+                            self.Registro_tabla_historial(enviar_datos)
                             # endregion
                             datos = resp1[1]
                             antecedentes = datos[1]
@@ -5427,19 +4502,8 @@ class Principal(QMainWindow):
                         if resp2[0] == 1:
                             if resp2[1]!=None:
                                 # region registro en la tabla historial
-                                tabla = "fecha"
-                                columnas = "id_fecha,fechayhora,tipo_fecha"
-                                id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                valores = [id_fecha1, fecha_actual, 9]
-                                hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                if hist == 1:
-                                    tabla = "historial"
-                                    columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                    id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                    historial_log = [id_historial, matricula_user, id_fecha1, str(codigo_paciente1), 3, "carnet"]
-                                    hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                    if hist1 == 1:
-                                        pass
+                                enviar_datos = 9, str(codigo_paciente1), 3, "carnet"
+                                self.Registro_tabla_historial(enviar_datos)
                                 # endregion
                                 datos = resp2[1]
                                 carnet = datos[1]
@@ -5453,19 +4517,8 @@ class Principal(QMainWindow):
                         resp3 = self.Buscar_datos_paciente(4, codigo_paciente1)
                         if resp3[0] == 1:
                             # region registro en la tabla historial
-                            tabla = "fecha"
-                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                            valores = [id_fecha1, fecha_actual, 9]
-                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                            if hist == 1:
-                                tabla = "historial"
-                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                historial_log = [id_historial, matricula_user, id_fecha1, str(codigo_paciente1), 3, "familiar"]
-                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                if hist1 == 1:
-                                    pass
+                            enviar_datos = 9, str(codigo_paciente1), 3, "familiar"
+                            self.Registro_tabla_historial(enviar_datos)
                             # endregion
                             datos = resp3[1]
                             if len(datos) > 1:
@@ -5488,19 +4541,8 @@ class Principal(QMainWindow):
                                     if resp4[0] == 1:
                                         if resp4[1] != None:
                                             # region registro en la tabla historial
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha1, fecha_actual, 9]
-                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if hist == 1:
-                                                tabla = "historial"
-                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "carnet"]
-                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                if hist1 == 1:
-                                                    pass
+                                            enviar_datos = 9, str(id_fam1), 3, "carnet"
+                                            self.Registro_tabla_historial(enviar_datos)
                                             # endregion
                                             datos = resp4[1]
                                             carnet1 = datos[0]
@@ -5515,19 +4557,8 @@ class Principal(QMainWindow):
                                     if resp5[0] == 1:
                                         if resp5[1] != None:
                                             # region registro en la tabla historial
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha1, fecha_actual, 9]
-                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if hist == 1:
-                                                tabla = "historial"
-                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam2), 3, "carnet"]
-                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                if hist1 == 1:
-                                                    pass
+                                            enviar_datos = 9, str(id_fam2), 3, "carnet"
+                                            self.Registro_tabla_historial(enviar_datos)
                                             # endregion
                                             datos = resp5[1]
                                             carnet2 = datos[0]
@@ -5544,19 +4575,8 @@ class Principal(QMainWindow):
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha_actual, 9]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "telefono"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 9, str(id_fam1), 3, "telefono"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         tel1 = resp6[1]
                                     else:
@@ -5567,19 +4587,8 @@ class Principal(QMainWindow):
                                     resp7 = self.Select_bbdd(columna, tabla, valor)
                                     if resp7[0] == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha_actual, 9]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam2), 3, "telefono"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 9, str(id_fam2), 3, "telefono"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         tel2 = resp7[1]
                                     else:
@@ -5591,19 +4600,8 @@ class Principal(QMainWindow):
                                     if resp4[0] == 1:
                                         if resp4[1] != None:
                                             # region registro en la tabla historial
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha1, fecha_actual, 9]
-                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if hist == 1:
-                                                tabla = "historial"
-                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "carnet"]
-                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                if hist1 == 1:
-                                                    pass
+                                            enviar_datos = 9, str(id_fam1), 3, "carnet"
+                                            self.Registro_tabla_historial(enviar_datos)
                                             # endregion
                                             datos = resp4[1]
                                             carnet1 = datos[0]
@@ -5618,19 +4616,8 @@ class Principal(QMainWindow):
                                     if resp5[0] == 1:
                                         if resp5[1] != None:
                                             # region registro en la tabla historial
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha1, fecha_actual, 9]
-                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if hist == 1:
-                                                tabla = "historial"
-                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam2), 3, "carnet"]
-                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                if hist1 == 1:
-                                                    pass
+                                            enviar_datos = 9, str(id_fam2), 3, "carnet"
+                                            self.Registro_tabla_historial(enviar_datos)
                                             # endregion
                                             datos = resp5[1]
                                             carnet2 = datos[0]
@@ -5647,19 +4634,8 @@ class Principal(QMainWindow):
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha_actual, 9]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "telefono"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 9, str(id_fam1), 3, "telefono"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         tel1 = resp6[1]
                                     else:
@@ -5670,19 +4646,8 @@ class Principal(QMainWindow):
                                     resp7 = self.Select_bbdd(columna, tabla, valor)
                                     if resp7[0] == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha_actual, 9]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam2), 3, "telefono"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 9, str(id_fam2), 3, "telefono"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         tel2 = resp7[1]
                                     else:
@@ -5701,19 +4666,8 @@ class Principal(QMainWindow):
                                     if resp4[0] == 1:
                                         if resp4[1] != None:
                                             # region registro en la tabla historial
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha1, fecha_actual, 9]
-                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if hist == 1:
-                                                tabla = "historial"
-                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "carnet"]
-                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                if hist1 == 1:
-                                                    pass
+                                            enviar_datos = 9, str(id_fam1), 3, "carnet"
+                                            self.Registro_tabla_historial(enviar_datos)
                                             # endregion
                                             datos = resp4[1]
                                             carnet1 = datos[0]
@@ -5732,19 +4686,8 @@ class Principal(QMainWindow):
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha_actual, 9]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "telefono"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 9, str(id_fam1), 3, "telefono"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         tel1 = resp6[1]
                                     else:
@@ -5757,19 +4700,8 @@ class Principal(QMainWindow):
                                     if resp4[0] == 1:
                                         if resp4[1] != None:
                                             # region registro en la tabla historial
-                                            tabla = "fecha"
-                                            columnas = "id_fecha,fechayhora,tipo_fecha"
-                                            id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                            valores = [id_fecha1, fecha_actual, 9]
-                                            hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                            if hist == 1:
-                                                tabla = "historial"
-                                                columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                                id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                                historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "carnet"]
-                                                hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                                if hist1 == 1:
-                                                    pass
+                                            enviar_datos = 9, str(id_fam1), 3, "carnet"
+                                            self.Registro_tabla_historial(enviar_datos)
                                             # endregion
                                             datos = resp4[1]
                                             carnet2 = datos[0]
@@ -5788,19 +4720,8 @@ class Principal(QMainWindow):
                                     resp6 = self.Select_bbdd(columna, tabla, valor)
                                     if resp6[0] == 1:
                                         # region registro en la tabla historial
-                                        tabla = "fecha"
-                                        columnas = "id_fecha,fechayhora,tipo_fecha"
-                                        id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                                        valores = [id_fecha1, fecha_actual, 9]
-                                        hist = self.Insertar_bbdd(tabla, columnas, valores)
-                                        if hist == 1:
-                                            tabla = "historial"
-                                            columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                                            id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                                            historial_log = [id_historial, matricula_user, id_fecha1, str(id_fam1), 3, "telefono"]
-                                            hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                                            if hist1 == 1:
-                                                pass
+                                        enviar_datos = 9, str(id_fam1), 3, "telefono"
+                                        self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         tel2 = resp6[1]
                                     else:
@@ -5851,19 +4772,8 @@ class Principal(QMainWindow):
                 resp8=self.Buscar_datos_paciente(6,codigo_consulta)
                 if resp8[0]==1:
                     # region registro en la tabla historial
-                    tabla = "fecha"
-                    columnas = "id_fecha,fechayhora,tipo_fecha"
-                    id_fecha1 = self.Conseguir_id_tabla(1, "id_fecha", tabla)
-                    valores = [id_fecha1, fecha_actual, 9]
-                    hist = self.Insertar_bbdd(tabla, columnas, valores)
-                    if hist == 1:
-                        tabla = "historial"
-                        columnas = "id_historial,medico,fecha,id_tabla,descripciones,tabla"
-                        id_historial = self.Conseguir_id_tabla(1, "id_historial", tabla)
-                        historial_log = [id_historial, matricula_user, id_fecha1, str(codigo_consulta), 3, "consulta,fecha"]
-                        hist1 = self.Insertar_bbdd(tabla, columnas, historial_log)
-                        if hist1 == 1:
-                            pass
+                    enviar_datos = 9, str(codigo_consulta), 3, "consulta, fecha"
+                    self.Registro_tabla_historial(enviar_datos)
                     # endregion
                     datos=resp8[1]
                     dr='Dr. {} {} {}'.format(datos[0],datos[1],datos[2])
