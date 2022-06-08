@@ -1945,7 +1945,6 @@ class Principal(QMainWindow):
     #endregion
     #region verificar el codigo enviado al correo
     def Verifica_codigo(self):
-        # valor = Clases.Metodos.Generador_clave()
         global codigo
         codigo1 = self.ui.txt_recu_codigo.text()
         if not codigo1:
@@ -2003,275 +2002,175 @@ class Principal(QMainWindow):
             nom = self.ui.txt_admin_nombre.text()
             ape1 = self.ui.txt_admin_app1.text()
             ape2 = self.ui.txt_admin_app2.text()
-            if not nom and not ape1 and not ape2:
-                QMessageBox.critical(self, "Campos vacíos", "Al menos uno de los campos debe ser llenado")
-            else:
-                if nom and not ape1 and not ape2:
-                    nom = str(nom).lower()
-                    resultado = self.Busqueda_user(1, nom,ape1,ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con el nombre: {}".format(nom)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        self.Datos_tabla(1, resultado)
-                if ape1 and not nom and not ape2:
-                    ape1 = str(ape1).lower()
-                    resultado = self.Busqueda_user(2, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con apellido paterno: {}".format(ape1)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        self.Datos_tabla(1, resultado)
-                if ape2 and not nom and not ape1:
-                    ape2 = str(ape2).lower()
-                    resultado = self.Busqueda_user(3, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con apellido materno: {}".format(ape2)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        self.Datos_tabla(1, resultado)
-                if nom and ape1 and not ape2:
-                    nom = str(nom).lower()
-                    ape1 = str(ape1).lower()
-                    resultado = self.Busqueda_user(4, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con nombre {} y apellido paterno {}".format(nom, ape1)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        self.Datos_tabla(1, resultado)
-                if nom and ape2 and not ape1:
-                    nom = str(nom).lower()
-                    ape2 = str(ape2).lower()
-                    resultado = self.Busqueda_user(5, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con nombre {} y apellido materno {}".format(nom, ape2)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        self.Datos_tabla(1, resultado)
-                if ape1 and ape2 and not nom:
-                    ape1 = str(ape1).lower()
-                    ape2 = str(ape2).lower()
-                    resultado = self.Busqueda_user(6, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con apellido paterno {} y apellido materno {}".format(ape1, ape2)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        self.Datos_tabla(1, resultado)
-                if nom and ape1 and ape2:
-                    nom = str(nom).lower()
-                    ape1 = str(ape1).lower()
-                    ape2 = str(ape2).lower()
-                    resultado = self.Busqueda_user(7, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con nombre {} {} {}".format(nom, ape1, ape2)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        self.Datos_tabla(1, resultado)
         if caso == 2:
             nom = self.ui.txt_hist_pac_nom.text()
             ape1 = self.ui.txt_hist_pac_app1.text()
             ape2 = self.ui.txt_hist_pac_app2.text()
-            if not nom and not ape1 and not ape2:
-                QMessageBox.critical(self, "Campos vacíos", "Al menos uno de los campos debe ser llenado")
-            else:
-                if nom and not ape1 and not ape2:
-                    nom = str(nom).lower()
-                    resultado = self.Busqueda_paciente(1, nom,ape1,ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con el nombre: {}".format(nom)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        # region registro en la tabla historial
-                        razon = "busqueda paciente: {}".format(nom)
-                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
-                        self.Registro_tabla_historial(enviar_datos)
-                        # endregion
-                        self.Datos_tabla(2, resultado)
-                if ape1 and not nom and not ape2:
-                    ape1 = str(ape1).lower()
-                    resultado = self.Busqueda_paciente(2, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con apellido paterno: {}".format(ape1)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        # region registro en la tabla historial
-                        razon = "busqueda paciente: {}".format(ape1)
-                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
-                        self.Registro_tabla_historial(enviar_datos)
-                        # endregion
-                        self.Datos_tabla(2, resultado)
-                if ape2 and not nom and not ape1:
-                    ape2 = str(ape2).lower()
-                    resultado = self.Busqueda_paciente(3, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con apellido materno: {}".format(ape2)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        # region registro en la tabla historial
-                        razon = "busqueda paciente: {}".format(ape2)
-                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
-                        self.Registro_tabla_historial(enviar_datos)
-                        # endregion
-                        self.Datos_tabla(2, resultado)
-                if nom and ape1 and not ape2:
-                    nom = str(nom).lower()
-                    ape1 = str(ape1).lower()
-                    resultado = self.Busqueda_paciente(4, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con nombre {} y apellido paterno {}".format(nom, ape1)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        # region registro en la tabla historial
-                        razon = "busqueda paciente: {} {}".format(nom,ape1)
-                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
-                        self.Registro_tabla_historial(enviar_datos)
-                        # endregion
-                        self.Datos_tabla(2, resultado)
-                if nom and ape2 and not ape1:
-                    nom = str(nom).lower()
-                    ape2 = str(ape2).lower()
-                    resultado = self.Busqueda_paciente(5, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con nombre {} y apellido materno {}".format(nom, ape2)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        # region registro en la tabla historial
-                        razon = "busqueda paciente: {} {}".format(nom, ape2)
-                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
-                        self.Registro_tabla_historial(enviar_datos)
-                        # endregion
-                        self.Datos_tabla(2, resultado)
-                if ape1 and ape2 and not nom:
-                    ape1 = str(ape1).lower()
-                    ape2 = str(ape2).lower()
-                    resultado = self.Busqueda_paciente(6, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con apellido paterno {} y apellido materno {}".format(ape1, ape2)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        # region registro en la tabla historial
-                        razon = "busqueda paciente: {} {}".format(ape1,ape2)
-                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
-                        self.Registro_tabla_historial(enviar_datos)
-                        # endregion
-                        self.Datos_tabla(2, resultado)
-                if nom and ape1 and ape2:
-                    nom = str(nom).lower()
-                    ape1 = str(ape1).lower()
-                    ape2 = str(ape2).lower()
-                    resultado = self.Busqueda_paciente(7, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con nombre {} {} {}".format(nom, ape1, ape2)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
-                        # region registro en la tabla historial
-                        razon = "busqueda paciente: {} {} {}".format(nom, ape1,ape2)
-                        enviar_datos = 9, razon, 3, "persona, consulta, fecha"
-                        self.Registro_tabla_historial(enviar_datos)
-                        # endregion
-                        self.Datos_tabla(2, resultado)
         if caso == 3:
             nom = self.ui.txt_info_pac_nom.text()
             ape1 = self.ui.txt_info_pac_app1.text()
             ape2 = self.ui.txt_info_pac_app2.text()
-            if not nom and not ape1 and not ape2:
-                QMessageBox.critical(self, "Campos vacíos", "Al menos uno de los campos debe ser llenado")
-            else:
-                if nom and not ape1 and not ape2:
-                    nom = str(nom).lower()
-                    resultado = self.Busqueda_paciente(1, nom,ape1,ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con el nombre: {}".format(nom)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
+        if not nom and not ape1 and not ape2:
+            QMessageBox.critical(self, "Campos vacíos", "Al menos uno de los campos debe ser llenado")
+        else:
+            if nom and not ape1 and not ape2:
+                nom = str(nom).lower()
+                if caso==1:
+                    resultado = self.Busqueda_user(1, nom,ape1,ape2)
+                if caso==2 or caso==3:
+                    resultado=self.Busqueda_paciente(1,nom,ape1,ape2)
+                if not resultado:
+                    mensaje = "No existe una persona con el nombre: {}".format(nom)
+                    QMessageBox.critical(self, "Mensaje de error", mensaje)
+                else:
+                    if caso==2 or caso==3:
                         # region registro en la tabla historial
                         razon = "busqueda paciente: {}".format(nom)
                         enviar_datos = 9, razon, 3, "persona, consulta, fecha"
                         self.Registro_tabla_historial(enviar_datos)
                         # endregion
+                    if caso==1:
+                        self.Datos_tabla(1, resultado)
+                    if caso==2:
+                        self.Datos_tabla(2, resultado)
+                    if caso==3:
                         self.Datos_tabla(3, resultado)
-                if ape1 and not nom and not ape2:
-                    ape1 = str(ape1).lower()
-                    resultado = self.Busqueda_paciente(2, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con apellido paterno: {}".format(ape1)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
+            if ape1 and not nom and not ape2:
+                ape1 = str(ape1).lower()
+                if caso==1:
+                    resultado = self.Busqueda_user(2, nom, ape1, ape2)
+                if caso==2 or caso==3:
+                    resultado=self.Busqueda_paciente(2,nom,ape1,ape2)
+                if not resultado:
+                    mensaje = "No existe una persona con apellido paterno: {}".format(ape1)
+                    QMessageBox.critical(self, "Mensaje de error", mensaje)
+                else:
+                    if caso==2 or caso ==3:
                         # region registro en la tabla historial
                         razon = "busqueda paciente: {}".format(ape1)
                         enviar_datos = 9, razon, 3, "persona, consulta, fecha"
                         self.Registro_tabla_historial(enviar_datos)
                         # endregion
+                    if caso==1:
+                        self.Datos_tabla(1, resultado)
+                    if caso==2:
+                        self.Datos_tabla(2, resultado)
+                    if caso==3:
                         self.Datos_tabla(3, resultado)
-                if ape2 and not nom and not ape1:
-                    ape2 = str(ape2).lower()
-                    resultado = self.Busqueda_paciente(3, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con apellido materno: {}".format(ape2)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
+            if ape2 and not nom and not ape1:
+                ape2 = str(ape2).lower()
+                if caso==1:
+                    resultado = self.Busqueda_user(3, nom, ape1, ape2)
+                if caso==2 or caso==3:
+                    resultado=self.Busqueda_paciente(3,nom,ape1,ape2)
+                if not resultado:
+                    mensaje = "No existe una persona con apellido materno: {}".format(ape2)
+                    QMessageBox.critical(self, "Mensaje de error", mensaje)
+                else:
+                    if caso==2 or caso==3:
                         # region registro en la tabla historial
                         razon = "busqueda paciente: {}".format(ape2)
                         enviar_datos = 9, razon, 3, "persona, consulta, fecha"
                         self.Registro_tabla_historial(enviar_datos)
                         # endregion
+                    if caso==1:
+                        self.Datos_tabla(1, resultado)
+                    if caso==2:
+                        self.Datos_tabla(2, resultado)
+                    if caso==3:
                         self.Datos_tabla(3, resultado)
-                if nom and ape1 and not ape2:
-                    nom = str(nom).lower()
-                    ape1 = str(ape1).lower()
-                    resultado = self.Busqueda_paciente(4, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con nombre {} y apellido paterno {}".format(nom, ape1)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
+            if nom and ape1 and not ape2:
+                nom = str(nom).lower()
+                ape1 = str(ape1).lower()
+                if caso==1:
+                    resultado = self.Busqueda_user(4, nom, ape1, ape2)
+                if caso==2 or caso==3:
+                    resultado=self.Busqueda_paciente(4,nom,ape1,ape2)
+                if not resultado:
+                    mensaje = "No existe una persona con nombre {} y apellido paterno {}".format(nom, ape1)
+                    QMessageBox.critical(self, "Mensaje de error", mensaje)
+                else:
+                    if caso==2 or caso==3:
                         # region registro en la tabla historial
-                        razon = "busqueda paciente: {} {}".format(nom,ape1)
+                        razon = "busqueda paciente: {} {}".format(nom, ape1)
                         enviar_datos = 9, razon, 3, "persona, consulta, fecha"
                         self.Registro_tabla_historial(enviar_datos)
                         # endregion
+                    if caso==1:
+                        self.Datos_tabla(1, resultado)
+                    if caso==2:
+                        self.Datos_tabla(2, resultado)
+                    if caso==3:
                         self.Datos_tabla(3, resultado)
-                if nom and ape2 and not ape1:
-                    nom = str(nom).lower()
-                    ape2 = str(ape2).lower()
-                    resultado = self.Busqueda_paciente(5, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con nombre {} y apellido materno {}".format(nom, ape2)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
+            if nom and ape2 and not ape1:
+                nom = str(nom).lower()
+                ape2 = str(ape2).lower()
+                if caso==1:
+                    resultado = self.Busqueda_user(5, nom, ape1, ape2)
+                if caso==2 or caso==3:
+                    resultado=self.Busqueda_paciente(5,nom,ape1,ape2)
+                if not resultado:
+                    mensaje = "No existe una persona con nombre {} y apellido materno {}".format(nom, ape2)
+                    QMessageBox.critical(self, "Mensaje de error", mensaje)
+                else:
+                    if caso==2 or caso==3:
                         # region registro en la tabla historial
                         razon = "busqueda paciente: {} {}".format(nom, ape2)
                         enviar_datos = 9, razon, 3, "persona, consulta, fecha"
                         self.Registro_tabla_historial(enviar_datos)
                         # endregion
+                    if caso==1:
+                        self.Datos_tabla(1, resultado)
+                    if caso==2:
+                        self.Datos_tabla(2, resultado)
+                    if caso==3:
                         self.Datos_tabla(3, resultado)
-                if ape1 and ape2 and not nom:
-                    ape1 = str(ape1).lower()
-                    ape2 = str(ape2).lower()
-                    resultado = self.Busqueda_paciente(6, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con apellido paterno {} y apellido materno {}".format(ape1, ape2)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
+            if ape1 and ape2 and not nom:
+                ape1 = str(ape1).lower()
+                ape2 = str(ape2).lower()
+                if caso==1:
+                    resultado = self.Busqueda_user(6, nom, ape1, ape2)
+                if caso==2 or caso==3:
+                    resultado=self.Busqueda_paciente(6,nom,ape1,ape2)
+                if not resultado:
+                    mensaje = "No existe una persona con apellido paterno {} y apellido materno {}".format(ape1, ape2)
+                    QMessageBox.critical(self, "Mensaje de error", mensaje)
+                else:
+                    if caso==2 or caso==3:
                         # region registro en la tabla historial
-                        razon = "busqueda paciente: {} {}".format(ape1,ape2)
+                        razon = "busqueda paciente: {} {}".format(ape1, ape2)
                         enviar_datos = 9, razon, 3, "persona, consulta, fecha"
                         self.Registro_tabla_historial(enviar_datos)
                         # endregion
+                    if caso==1:
+                        self.Datos_tabla(1, resultado)
+                    if caso==2:
+                        self.Datos_tabla(2, resultado)
+                    if caso==3:
                         self.Datos_tabla(3, resultado)
-                if nom and ape1 and ape2:
-                    nom = str(nom).lower()
-                    ape1 = str(ape1).lower()
-                    ape2 = str(ape2).lower()
-                    resultado = self.Busqueda_paciente(7, nom, ape1, ape2)
-                    if not resultado:
-                        mensaje = "No existe una persona con nombre {} {} {}".format(nom, ape1, ape2)
-                        QMessageBox.critical(self, "Mensaje de error", mensaje)
-                    else:
+            if nom and ape1 and ape2:
+                nom = str(nom).lower()
+                ape1 = str(ape1).lower()
+                ape2 = str(ape2).lower()
+                if caso==1:
+                    resultado = self.Busqueda_user(7, nom, ape1, ape2)
+                if caso==2 or caso==3:
+                    resultado=self.Busqueda_paciente(7,nom,ape1,ape2)
+                if not resultado:
+                    mensaje = "No existe una persona con nombre {} {} {}".format(nom, ape1, ape2)
+                    QMessageBox.critical(self, "Mensaje de error", mensaje)
+                else:
+                    if caso==2 or caso==3:
                         # region registro en la tabla historial
-                        razon = "busqueda paciente: {} {} {}".format(nom, ape1,ape2)
+                        razon = "busqueda paciente: {} {} {}".format(nom, ape1, ape2)
                         enviar_datos = 9, razon, 3, "persona, consulta, fecha"
                         self.Registro_tabla_historial(enviar_datos)
                         # endregion
+                    if caso==1:
+                        self.Datos_tabla(1, resultado)
+                    if caso==2:
+                        self.Datos_tabla(2, resultado)
+                    if caso == 3:
                         self.Datos_tabla(3, resultado)
     #endregion
     #region metodo de registro de nuevo usuario
@@ -2356,7 +2255,6 @@ class Principal(QMainWindow):
             fecha = QDate.currentDate()
         if self.ui.tab_fecha_hora.currentIndex() == 1:
             fecha = self.ui.spin_hist_pac_date.date()
-        #fecha1 = datetime.datetime.strptime(fecha1, '%Y/%m/%d')
         mensaje=self.Calcular_fecha(fecha1, fecha)
         self.ui.lbl_hist_pac_edad.setText(mensaje)
         self.ui.lbl_hist_pac_edad.setVisible(True)
@@ -2389,7 +2287,6 @@ class Principal(QMainWindow):
                 a += 4
                 c += 1
                 y = 31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-
         if fecha.day() < fecha1.day:
             dia = y[fecha.month() - 1] - fecha1.day + fecha.day()
         if fecha.day() >= fecha1.day:
@@ -2397,7 +2294,7 @@ class Principal(QMainWindow):
         mensaje = "{} años {} meses {} días".format(anio, mes, dia)
         return mensaje
     #endregion
-    #region Verificar campos vacíos antes de hacer el cálculo
+    #region Verificar campos vacíos antes de hacer el cálculo IMC
     def Verifica_IMC(self):
         global w1
         w1 = self.ui.txt_hist_pac_pes.text()
@@ -2442,15 +2339,15 @@ class Principal(QMainWindow):
             mensaje = "{}{}{}".format(resp, " ", "Obesidad IV")
         return mensaje
     #endregion
-    # ver los historiales de logeo
+    #region ver los historiales de logeo
     def Busca_historial(self):
         global tema
         self.Limpia_admin2()
         self.Poner_tema(tema)
         self.ui.Stacked_main.setCurrentIndex(4)
         self.ui.Stacked_admin.setCurrentIndex(2)
-
-    # controla el cambio del combobox de historial de usuario
+    #endregion
+    #region controla el cambio del combobox de historial de usuario
     def Combo_cambio1(self):
         global medico
         d=QDate(2000,1,1)
@@ -2533,6 +2430,8 @@ class Principal(QMainWindow):
                 self.ui.Tabla_admin_historial.clearContents()
                 self.ui.Tabla_admin_historial.setRowCount(0)
                 self.ui.date_admin_historial.setDate(d)
+    #endregion
+    #region Controla el cambio en el combobox general
     def Combo_cambio2(self):
         d=QDate(2000,1,1)
         a=self.ui.cb_admin_med.currentIndex()
@@ -2544,6 +2443,8 @@ class Principal(QMainWindow):
             self.ui.date_admin_historial.setDate(d)
         else:
             self.ui.cb_admin_med2.setVisible(True)
+    #endregion
+    #region Controla el cambio en el combobox de medicos
     def Combo_cambio3(self):
         global medico
         a=self.ui.cb_admin_med.currentIndex()
@@ -2584,7 +2485,8 @@ class Principal(QMainWindow):
                     QMessageBox.critical(self, "Mensaje de error", "No se pudo acceder a la base de datos")
                 else:
                     self.Datos_tabla(5, resultado)
-
+    #endregion
+    #region Busca por fecha en el historial de administracion
     def Busca_por_fecha(self):
         fecha = self.ui.date_admin_historial.date()
         fecha = fecha.toPyDate()
@@ -2600,7 +2502,8 @@ class Principal(QMainWindow):
             QMessageBox.critical(self, "Mensaje de error", mensaje)
         else:
             self.Datos_tabla(5, resultado)
-    # cerrar la ventana de registro de usuario
+    #endregion
+    #region cerrar la ventana de registro de usuario
     def Cerrar_registro(self):
         global reg_us
         if reg_us == 1:
@@ -2609,8 +2512,8 @@ class Principal(QMainWindow):
         if reg_us == 2:
             self.ui.Stacked_main.setCurrentIndex(5)
             reg_us = 0
-
-    # entra a la ventana de administracion
+    #endregion
+    #region entra a la ventana de administracion
     def Entrar_control_user(self):
         global tema
         self.Limpia_admin1()
@@ -2620,8 +2523,8 @@ class Principal(QMainWindow):
         self.ui.txt_admin_nombre.setFocus()
         self.les = [self.ui.txt_admin_nombre, self.ui.txt_admin_app1, self.ui.txt_admin_app2,
                     self.ui.btn_admin_buscar_user]
-
-    # entrar a la ventana para cambiar el tema
+    #endregion
+    #region entrar a la ventana para cambiar el tema
     def Ventana_tema(self):
         global usuario
         global tema
@@ -2629,7 +2532,7 @@ class Principal(QMainWindow):
         self.Limpia_tema()
         self.Limpia_admin2()
         self.ui.Stacked_main.setCurrentIndex(10)
-
+    #endregion
     #region entrar a la ventana de registro de nuevo usuario desde el administrador
     def Ventana_admi_reg(self,caso):
         global tema
@@ -2787,7 +2690,6 @@ class Principal(QMainWindow):
     def Limpia_admin_reg(self):
         self.ui.txt_reg_user.clear()
         self.ui.cb_reg_user.setCurrentIndex(0)
-
     # endregion
     # ------------------------------------------------------------------------------------------
     # métodos que ocurren al cerrar las ventanas
@@ -2811,7 +2713,6 @@ class Principal(QMainWindow):
             self.ui.Stacked_admin.setCurrentIndex(0)
         else:
             self.ui.Stacked_main.setCurrentIndex(5)
-
     # endregion
     # region Metodo para Cerrar algunas ventanas de usuario medico
     def Cerrar_ventanas_usuario(self):
@@ -2823,7 +2724,6 @@ class Principal(QMainWindow):
         x = 0
         self.ui.Stacked_main.setCurrentIndex(5)
     # endregion
-
     # ----------------------------------------------------------------------------------------
     # ----------------------------------------------------------------------------------------
     # métodos que mejoran el funcionamiento
@@ -4281,8 +4181,6 @@ class Principal(QMainWindow):
                                         self.ui.txt_reg_pac_tel1.setText(str(resp6[1]))
                                     else:
                                         bbdd_tel1=""
-                                    columna = "numero"
-                                    tabla = "telefono"
                                     valor = "familiar", id_fam2
                                     resp7 = self.Select_bbdd(columna, tabla, valor)
                                     if resp7[0] == 1:

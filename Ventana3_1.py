@@ -894,6 +894,10 @@ class Ui_MainWindow(object):
 "    background:#ffaa7f;\n"
 "    border-radius:10px;\n"
 "}\n"
+"QPushButton:focus{\n"
+"    background:#ffaa7f;\n"
+"    border-radius:10px;\n"
+"}\n"
 "QFrame{\n"
 "    border-image: url(:/imagenes/logotipo.png);\n"
 "}")
