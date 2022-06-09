@@ -1513,385 +1513,137 @@ class Principal(QMainWindow):
                     QMessageBox.critical(self,"Mensaje de error","La matricula de médico ya se encuentra registrada\n"
                                                                  "Verifique con el administrador para obtener una nueva contraseña")
             if reg_us==2:
-                correo=resultado_bbdd_usuario[6]
-                sal=resultado_bbdd_usuario[4]
-                password=resultado_bbdd_usuario[5]
-                texto=sal,password
-                password_desencriptada=Clases.Metodos.Desencriptador(2,texto)
-                sexo=resultado_bbdd_usuario[12]
-                numero=resultado_bbdd_usuario[7]
-                extension=resultado_bbdd_usuario[8]
-                nombre=resultado_bbdd_usuario[9]
-                apellido_p=resultado_bbdd_usuario[10]
-                apellido_m=resultado_bbdd_usuario[11]
-                persona[1] = str(persona[1]).lower().strip()
-                persona[2] = str(persona[2]).lower().strip()
-                persona[3] = str(persona[3]).lower().strip()
-                medico[3] = str(medico[3]).lower().strip()
-                codigo = Clases.Metodos.Generador_clave()
-                carnet[0]=str(carnet[0]).strip()
-                if carnet[0]!=numero or carnet[1]!=extension:
-                    tabla="carnet"
-                    columnas="numero","extension"
-                    id_tabla="id_carnet"
-                    valores=carnet[0],carnet[1],resultado_bbdd_usuario[2]
-                    resp=self.Update_bbdd(2,tabla,columnas,id_tabla,valores)
-                    if resp==1:
+                self.Verificar_user_5(carnet)
+                carnet = []
+                usuario1 = []
+
+    #endregion
+    #region Modificación de datos de usuario
+    def Verificar_user_1(self):
+        global persona
+        global medico
+        global reg_us
+        persona = []
+        medico = []
+        self.Limpia_reg_user()
+        reg_us = 0
+        self.ui.Stacked_main.setCurrentIndex(5)
+
+    def Verificar_user_2(self):
+        global usuario
+        global resultado_bbdd_usuario
+        sal = resultado_bbdd_usuario[4]
+        password = resultado_bbdd_usuario[5]
+        texto = sal, password
+        password_desencriptada = Clases.Metodos.Desencriptador(2, texto)
+        contra1 = self.ui.txt_reg_pass1.text()
+        if contra1 != password_desencriptada:
+            encriptado = Clases.Metodos.Encriptador2(2, contra1)
+            tabla = "usuario"
+            columnas = "pass", "sal"
+            id_tabla = "cuenta_user"
+            valores = encriptado[1], encriptado[0], usuario
+            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+            if resp == 1:
+                # region registro en la tabla historial
+                enviar_datos = 8, str(usuario), 2, "usuario"
+                self.Registro_tabla_historial(enviar_datos)
+                # endregion
+                resp1 = self.Reset_pass(2, usuario, contra1)
+                if resp1 == 1:
+                    QMessageBox.information(self, "Se ha cambiado con exito", "La contraseña ha sido cambiada")
+                    QMessageBox.information(self, "Cambio de pantalla","Se ha cambiado la contraseña por favor vuelva a iniciar sesión")
+                    self.Iniciar_cero()
+        else:
+            self.Verificar_user_1()
+
+    def Verificar_user_3(self):
+        global resultado_bbdd_usuario
+        global medico
+        correo = resultado_bbdd_usuario[6]
+        medico[3] = str(medico[3]).lower().strip()
+        codigo = Clases.Metodos.Generador_clave()
+        if medico[3] != correo:
+            resp10 = self.Probar_conexion()
+            if resp10 == 1:
+                Clases.Metodos.Enviar_codigo(codigo, medico[3])
+                tabla = "medico"
+                columnas = "correo",
+                id_tabla = "matricula"
+                valores = medico[3], resultado_bbdd_usuario[0]
+                resp2 = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                if resp2 == 1:
+                    # region registro en la tabla historial
+                    enviar_datos = 8, str(resultado_bbdd_usuario[0]), 2, "medico"
+                    self.Registro_tabla_historial(enviar_datos)
+                    # endregion
+                    tabla = "validaciones"
+                    columnas = "codigo", "validacion"
+                    id_tabla = "id_validaciones"
+                    valores = codigo, 'False', resultado_bbdd_usuario[3]
+                    resp3 = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+                    if resp3 == 1:
                         # region registro en la tabla historial
-                        enviar_datos = 8, str(resultado_bbdd_usuario[2]), 2, "carnet"
+                        enviar_datos = 8, str(resultado_bbdd_usuario[3]), 2, "validaciones"
                         self.Registro_tabla_historial(enviar_datos)
                         # endregion
-                    else:
-                        QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar el carnet")
-                    if nombre != persona[1] or apellido_p != persona[2] or apellido_m != persona[3] or sexo != persona[5]:
-                        tabla = "persona"
-                        columnas = "nombre", "apellido1", "apellido2", "tipo_sexo"
-                        id_tabla = "id_persona"
-                        valores = persona[1], persona[2], persona[3], persona[5], resultado_bbdd_usuario[1]
-                        resp1 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                        if resp1==1:
-                            # region registro en la tabla historial
-                            enviar_datos = 8, str(resultado_bbdd_usuario[1]), 2, "persona"
-                            self.Registro_tabla_historial(enviar_datos)
-                            # endregion
-                        else:
-                            QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar los datos personales")
-                        if medico[3] != correo:
-                            resp10 = self.Probar_conexion()
-                            if resp10 == 1:
-                                Clases.Metodos.Enviar_codigo(codigo, medico[3])
-                                tabla = "medico"
-                                columnas = "correo",
-                                id_tabla = "matricula"
-                                valores = medico[3], resultado_bbdd_usuario[0]
-                                resp2 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                if resp2 == 1:
-                                    # region registro en la tabla historial
-                                    enviar_datos = 8, str(resultado_bbdd_usuario[0]), 2, "medico"
-                                    self.Registro_tabla_historial(enviar_datos)
-                                    # endregion
-                                    tabla = "validaciones"
-                                    columnas = "codigo", "validacion"
-                                    id_tabla = "id_validaciones"
-                                    valores = codigo, 'False', resultado_bbdd_usuario[3]
-                                    resp3 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                    if resp3 == 1:
-                                        # region registro en la tabla historial
-                                        enviar_datos = 8, str(resultado_bbdd_usuario[3]), 2, "validaciones"
-                                        self.Registro_tabla_historial(enviar_datos)
-                                        # endregion
-                                        QMessageBox.information(self, "Mensaje de éxito", "Se ha actualizado con éxito el correo\n"
-                                                                                          "Se le ha enviado un nuevo código de confirmación\n"
-                                                                                          "a su nueva dirección de correo electrónico")
-                            else:
-                                QMessageBox.critical(self, "Mensaje de error", "No hay conexión a internet, verifique su conexión antes de continuar")
-                            if contra1 != password_desencriptada:
-                                encriptado = Clases.Metodos.Encriptador2(2, contra1)
-                                tabla = "usuario"
-                                columnas = "pass", "sal"
-                                id_tabla = "cuenta_user"
-                                valores = encriptado[1], encriptado[0], usuario
-                                resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                if resp == 1:
-                                    # region registro en la tabla historial
-                                    enviar_datos = 8, str(usuario), 2, "usuario"
-                                    self.Registro_tabla_historial(enviar_datos)
-                                    # endregion
-                                    resp1 = self.Reset_pass(2, usuario, contra1)
-                                    if resp1 == 1:
-                                        QMessageBox.information(self, "Se ha cambiado con exito", "La contraseña ha sido cambiada")
-                                        QMessageBox.information(self, "Cambio de pantalla", "Se ha cambiado la contraseña por favor vuelva a iniciar sesión")
-                                        self.Iniciar_cero()
-                            else:
-                                persona=[]
-                                carnet=[]
-                                usuario1=[]
-                                medico=[]
-                                self.Limpia_reg_user()
-                                reg_us = 0
-                                self.ui.Stacked_main.setCurrentIndex(5)
-                        else:
-                            if contra1 != password_desencriptada:
-                                encriptado = Clases.Metodos.Encriptador2(2, contra1)
-                                tabla = "usuario"
-                                columnas = "pass", "sal"
-                                id_tabla = "cuenta_user"
-                                valores = encriptado[1], encriptado[0], usuario
-                                resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                if resp == 1:
-                                    # region registro en la tabla historial
-                                    enviar_datos = 8, str(usuario), 2, "usuario"
-                                    self.Registro_tabla_historial(enviar_datos)
-                                    # endregion
-                                    resp1 = self.Reset_pass(2, usuario, contra1)
-                                    if resp1 == 1:
-                                        QMessageBox.information(self, "Se ha cambiado con exito", "La contraseña ha sido cambiada")
-                                        QMessageBox.information(self, "Cambio de pantalla", "Se ha cambiado la contraseña por favor vuelva a iniciar sesión")
-                                        self.Iniciar_cero()
-                            else:
-                                persona=[]
-                                carnet=[]
-                                usuario1=[]
-                                medico=[]
-                                self.Limpia_reg_user()
-                                reg_us = 0
-                                self.ui.Stacked_main.setCurrentIndex(5)
-                    else:
-                        if medico[3] != correo:
-                            resp10 = self.Probar_conexion()
-                            if resp10 == 1:
-                                Clases.Metodos.Enviar_codigo(codigo, medico[3])
-                                tabla = "medico"
-                                columnas = "correo",
-                                id_tabla = "matricula"
-                                valores = medico[3], resultado_bbdd_usuario[0]
-                                resp2 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                if resp2 == 1:
-                                    # region registro en la tabla historial
-                                    enviar_datos = 8, str(resultado_bbdd_usuario[0]), 2, "medico"
-                                    self.Registro_tabla_historial(enviar_datos)
-                                    # endregion
-                                    tabla = "validaciones"
-                                    columnas = "codigo", "validacion"
-                                    id_tabla = "id_validaciones"
-                                    valores = codigo, 'False', resultado_bbdd_usuario[3]
-                                    resp3 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                    if resp3 == 1:
-                                        # region registro en la tabla historial
-                                        enviar_datos = 8, str(resultado_bbdd_usuario[3]), 2, "validaciones"
-                                        self.Registro_tabla_historial(enviar_datos)
-                                        # endregion
-                                        QMessageBox.information(self, "Mensaje de éxito", "Se ha actualizado con éxito el correo\n"
-                                                                                          "Se le ha enviado un nuevo código de confirmación\n"
-                                                                                          "a su nueva dirección de correo electrónico")
-                            else:
-                                QMessageBox.critical(self, "Mensaje de error", "No hay conexión a internet, verifique su conexión antes de continuar")
-                            if contra1 != password_desencriptada:
-                                encriptado = Clases.Metodos.Encriptador2(2, contra1)
-                                tabla = "usuario"
-                                columnas = "pass", "sal"
-                                id_tabla = "cuenta_user"
-                                valores = encriptado[1], encriptado[0], usuario
-                                resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                if resp == 1:
-                                    # region registro en la tabla historial
-                                    enviar_datos = 8, str(usuario), 2, "usuario"
-                                    self.Registro_tabla_historial(enviar_datos)
-                                    # endregion
-                                    resp1 = self.Reset_pass(2, usuario, contra1)
-                                    if resp1 == 1:
-                                        QMessageBox.information(self, "Se ha cambiado con exito", "La contraseña ha sido cambiada")
-                                        QMessageBox.information(self, "Cambio de pantalla", "Se ha cambiado la contraseña por favor vuelva a iniciar sesión")
-                                        self.Iniciar_cero()
-                            else:
-                                persona=[]
-                                carnet=[]
-                                usuario1=[]
-                                medico=[]
-                                self.Limpia_reg_user()
-                                reg_us = 0
-                                self.ui.Stacked_main.setCurrentIndex(5)
-                        else:
-                            if contra1 != password_desencriptada:
-                                encriptado = Clases.Metodos.Encriptador2(2, contra1)
-                                tabla = "usuario"
-                                columnas = "pass", "sal"
-                                id_tabla = "cuenta_user"
-                                valores = encriptado[1], encriptado[0], usuario
-                                resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                if resp == 1:
-                                    # region registro en la tabla historial
-                                    enviar_datos = 8, str(usuario), 2, "usuario"
-                                    self.Registro_tabla_historial(enviar_datos)
-                                    # endregion
-                                    resp1 = self.Reset_pass(2, usuario, contra1)
-                                    if resp1 == 1:
-                                        QMessageBox.information(self, "Se ha cambiado con exito", "La contraseña ha sido cambiada")
-                                        QMessageBox.information(self, "Cambio de pantalla", "Se ha cambiado la contraseña por favor vuelva a iniciar sesión")
-                                        self.Iniciar_cero()
-                            else:
-                                persona=[]
-                                carnet=[]
-                                usuario1=[]
-                                medico=[]
-                                self.Limpia_reg_user()
-                                reg_us = 0
-                                self.ui.Stacked_main.setCurrentIndex(5)
-                else:
-                    if nombre!=persona[1] or apellido_p!=persona[2] or apellido_m!=persona[3] or sexo !=persona[5]:
-                        tabla = "persona"
-                        columnas = "nombre", "apellido1", "apellido2", "tipo_sexo"
-                        id_tabla = "id_persona"
-                        valores = persona[1], persona[2], persona[3], persona[5], resultado_bbdd_usuario[1]
-                        resp1=self.Update_bbdd(2,tabla,columnas,id_tabla,valores)
-                        if resp1==1:
-                            # region registro en la tabla historial
-                            enviar_datos = 8, str(resultado_bbdd_usuario[1]), 2, "persona"
-                            self.Registro_tabla_historial(enviar_datos)
-                            # endregion
-                        else:
-                            QMessageBox.critical(self,"Mensaje de error","No se pudo actualizar los datos personales")
-                        if medico[3] != correo:
-                            resp10 = self.Probar_conexion()
-                            if resp10 == 1:
-                                Clases.Metodos.Enviar_codigo(codigo, medico[3])
-                                tabla = "medico"
-                                columnas = "correo",
-                                id_tabla = "matricula"
-                                valores = medico[3], resultado_bbdd_usuario[0]
-                                resp2 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                if resp2 == 1:
-                                    # region registro en la tabla historial
-                                    enviar_datos = 8, str(resultado_bbdd_usuario[0]), 2, "medico"
-                                    self.Registro_tabla_historial(enviar_datos)
-                                    # endregion
-                                    tabla = "validaciones"
-                                    columnas = "codigo", "validacion"
-                                    id_tabla = "id_validaciones"
-                                    valores = codigo, 'False', resultado_bbdd_usuario[3]
-                                    resp3 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                    if resp3 == 1:
-                                        # region registro en la tabla historial
-                                        enviar_datos = 8, str(resultado_bbdd_usuario[3]), 2, "validaciones"
-                                        self.Registro_tabla_historial(enviar_datos)
-                                        # endregion
-                                        QMessageBox.information(self, "Mensaje de éxito", "Se ha actualizado con éxito el correo\n"
-                                                                                          "Se le ha enviado un nuevo código de confirmación\n"
-                                                                                          "a su nueva dirección de correo electrónico")
-                            else:
-                                QMessageBox.critical(self, "Mensaje de error", "No hay conexión a internet, verifique su conexión antes de continuar")
-                            if contra1 != password_desencriptada:
-                                encriptado = Clases.Metodos.Encriptador2(2, contra1)
-                                tabla = "usuario"
-                                columnas = "pass", "sal"
-                                id_tabla = "cuenta_user"
-                                valores = encriptado[1], encriptado[0], usuario
-                                resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                if resp == 1:
-                                    # region registro en la tabla historial
-                                    enviar_datos = 8, str(usuario), 2, "usuario"
-                                    self.Registro_tabla_historial(enviar_datos)
-                                    # endregion
-                                    resp1 = self.Reset_pass(2, usuario, contra1)
-                                    if resp1 == 1:
-                                        QMessageBox.information(self, "Se ha cambiado con exito", "La contraseña ha sido cambiada")
-                                        QMessageBox.information(self, "Cambio de pantalla", "Se ha cambiado la contraseña por favor vuelva a iniciar sesión")
-                                        self.Iniciar_cero()
-                            else:
-                                persona=[]
-                                carnet=[]
-                                usuario1=[]
-                                medico=[]
-                                self.Limpia_reg_user()
-                                reg_us = 0
-                                self.ui.Stacked_main.setCurrentIndex(5)
-                        else:
-                            if contra1 != password_desencriptada:
-                                encriptado = Clases.Metodos.Encriptador2(2, contra1)
-                                tabla = "usuario"
-                                columnas = "pass", "sal"
-                                id_tabla = "cuenta_user"
-                                valores = encriptado[1], encriptado[0], usuario
-                                resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                if resp == 1:
-                                    # region registro en la tabla historial
-                                    enviar_datos = 8, str(usuario), 2, "usuario"
-                                    self.Registro_tabla_historial(enviar_datos)
-                                    # endregion
-                                    resp1 = self.Reset_pass(2, usuario, contra1)
-                                    if resp1 == 1:
-                                        QMessageBox.information(self, "Se ha cambiado con exito", "La contraseña ha sido cambiada")
-                                        QMessageBox.information(self, "Cambio de pantalla", "Se ha cambiado la contraseña por favor vuelva a iniciar sesión")
-                                        self.Iniciar_cero()
-                            else:
-                                persona=[]
-                                carnet=[]
-                                usuario1=[]
-                                medico=[]
-                                self.Limpia_reg_user()
-                                reg_us = 0
-                                self.ui.Stacked_main.setCurrentIndex(5)
-                    else:
-                        if medico[3] != correo:
-                            resp10 = self.Probar_conexion()
-                            if resp10 == 1:
-                                Clases.Metodos.Enviar_codigo(codigo, medico[3])
-                                tabla = "medico"
-                                columnas = "correo",
-                                id_tabla = "matricula"
-                                valores = medico[3], resultado_bbdd_usuario[0]
-                                resp2 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                if resp2 == 1:
-                                    # region registro en la tabla historial
-                                    enviar_datos = 8, str(resultado_bbdd_usuario[0]), 2, "medico"
-                                    self.Registro_tabla_historial(enviar_datos)
-                                    # endregion
-                                    tabla = "validaciones"
-                                    columnas = "codigo", "validacion"
-                                    id_tabla = "id_validaciones"
-                                    valores = codigo, 'False', resultado_bbdd_usuario[3]
-                                    resp3 = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                    if resp3 == 1:
-                                        # region registro en la tabla historial
-                                        enviar_datos = 8, str(resultado_bbdd_usuario[3]), 2, "validaciones"
-                                        self.Registro_tabla_historial(enviar_datos)
-                                        # endregion
-                                        QMessageBox.information(self, "Mensaje de éxito", "Se ha actualizado con éxito el correo\n"
-                                                                                          "Se le ha enviado un nuevo código de confirmación\n"
-                                                                                          "a su nueva dirección de correo electrónico")
-                            else:
-                                QMessageBox.critical(self, "Mensaje de error", "No hay conexión a internet, verifique su conexión antes de continuar")
-                            if contra1 != password_desencriptada:
-                                encriptado = Clases.Metodos.Encriptador2(2, contra1)
-                                tabla = "usuario"
-                                columnas = "pass", "sal"
-                                id_tabla = "cuenta_user"
-                                valores = encriptado[1], encriptado[0], usuario
-                                resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                if resp == 1:
-                                    # region registro en la tabla historial
-                                    enviar_datos = 8, str(usuario), 2, "usuario"
-                                    self.Registro_tabla_historial(enviar_datos)
-                                    # endregion
-                                    resp1 = self.Reset_pass(2, usuario, contra1)
-                                    if resp1 == 1:
-                                        QMessageBox.information(self, "Se ha cambiado con exito", "La contraseña ha sido cambiada")
-                                        QMessageBox.information(self, "Cambio de pantalla", "Se ha cambiado la contraseña por favor vuelva a iniciar sesión")
-                                        self.Iniciar_cero()
-                            else:
-                                persona=[]
-                                carnet=[]
-                                usuario1=[]
-                                medico=[]
-                                self.Limpia_reg_user()
-                                reg_us = 0
-                                self.ui.Stacked_main.setCurrentIndex(5)
-                        else:
-                            if contra1 != password_desencriptada:
-                                encriptado = Clases.Metodos.Encriptador2(2, contra1)
-                                tabla = "usuario"
-                                columnas = "pass", "sal"
-                                id_tabla = "cuenta_user"
-                                valores = encriptado[1], encriptado[0], usuario
-                                resp = self.Update_bbdd(2,tabla, columnas, id_tabla, valores)
-                                if resp == 1:
-                                    # region registro en la tabla historial
-                                    enviar_datos = 8, str(usuario), 2, "usuario"
-                                    self.Registro_tabla_historial(enviar_datos)
-                                    # endregion
-                                    resp1 = self.Reset_pass(2, usuario, contra1)
-                                    if resp1 == 1:
-                                        QMessageBox.information(self, "Se ha cambiado con exito", "La contraseña ha sido cambiada")
-                                        QMessageBox.information(self, "Cambio de pantalla", "Se ha cambiado la contraseña por favor vuelva a iniciar sesión")
-                                        self.Iniciar_cero()
-                            else:
-                                persona=[]
-                                carnet=[]
-                                usuario1=[]
-                                medico=[]
-                                self.Limpia_reg_user()
-                                reg_us = 0
-                                self.ui.Stacked_main.setCurrentIndex(5)
+                        QMessageBox.information(self, "Mensaje de éxito", "Se ha actualizado con éxito el correo\n"
+                                                                          "Se le ha enviado un nuevo código de confirmación\n"
+                                                                          "a su nueva dirección de correo electrónico")
+            else:
+                QMessageBox.critical(self, "Mensaje de error","No hay conexión a internet, verifique su conexión antes de continuar")
+            self.Verificar_user_2()
+        else:
+            self.Verificar_user_2()
+
+    def Verificar_user_4(self):
+        global persona
+        global resultado_bbdd_usuario
+        nombre = resultado_bbdd_usuario[9]
+        apellido_p = resultado_bbdd_usuario[10]
+        apellido_m = resultado_bbdd_usuario[11]
+        sexo = resultado_bbdd_usuario[12]
+        persona[1] = str(persona[1]).lower().strip()
+        persona[2] = str(persona[2]).lower().strip()
+        persona[3] = str(persona[3]).lower().strip()
+        if nombre != persona[1] or apellido_p != persona[2] or apellido_m != persona[3] or sexo != persona[5]:
+            tabla = "persona"
+            columnas = "nombre", "apellido1", "apellido2", "tipo_sexo"
+            id_tabla = "id_persona"
+            valores = persona[1], persona[2], persona[3], persona[5], resultado_bbdd_usuario[1]
+            resp1 = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+            if resp1 == 1:
+                # region registro en la tabla historial
+                enviar_datos = 8, str(resultado_bbdd_usuario[1]), 2, "persona"
+                self.Registro_tabla_historial(enviar_datos)
+                # endregion
+            else:
+                QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar los datos personales")
+            self.Verificar_user_3()
+        else:
+            self.Verificar_user_3()
+
+    def Verificar_user_5(self,carnet):
+        global resultado_bbdd_usuario
+        numero = resultado_bbdd_usuario[7]
+        extension = resultado_bbdd_usuario[8]
+        carnet[0] = str(carnet[0]).strip()
+        if carnet[0] != numero or carnet[1] != extension:
+            tabla = "carnet"
+            columnas = "numero", "extension"
+            id_tabla = "id_carnet"
+            valores = carnet[0], carnet[1], resultado_bbdd_usuario[2]
+            resp = self.Update_bbdd(2, tabla, columnas, id_tabla, valores)
+            if resp == 1:
+                # region registro en la tabla historial
+                enviar_datos = 8, str(resultado_bbdd_usuario[2]), 2, "carnet"
+                self.Registro_tabla_historial(enviar_datos)
+                # endregion
+            else:
+                QMessageBox.critical(self, "Mensaje de error", "No se pudo actualizar el carnet")
+            self.Verificar_user_4()
+        else:
+            self.Verificar_user_4()
     #endregion
     #region como su nombre indica la siguiente funcion pretende comprobar direcion de mail válida
     def Verifica_email(self,mail):
@@ -2740,7 +2492,6 @@ class Principal(QMainWindow):
                 self.ui.lbl_hist_pac_temp.setText("°C Febrícula")
             elif resp == 4:
                 self.ui.lbl_hist_pac_temp.setText("°C Fiebre")
-
     # endregion
     # region metodo Elegir el tema
     def Elegir_tema(self):
@@ -2765,7 +2516,6 @@ class Principal(QMainWindow):
             else:
                 QMessageBox.critical(self,"Mensaje de error","Algo salió mal, no se pudo guardar el tema que eligió\n"
                                                              "Intente nuevamete dentro de un momento")
-
     # endregion
     # region metodo probar cambios en el tema de fondo y letra
     def Prueba_tema(self):
@@ -2774,7 +2524,6 @@ class Principal(QMainWindow):
             QMessageBox.critical(self, "Mensaje de error", "Debe seleccionar al menos una opcion para probar el tema")
         else:
             self.Poner_tema(tema1)
-
     # endregion
     # region método para el cambio de tema o implementación
     def Poner_tema(self, tema1):
@@ -3582,7 +3331,6 @@ class Principal(QMainWindow):
             self.ui.Frame_main.setStyleSheet("*{\n"
                                              "    font: 75 12pt \"Times New Roman\";\n"
                                              "}")
-
     # endregion
     # region método uestra la hora y la fecha
     def MostrarHora_fecha(self):
@@ -3595,7 +3343,6 @@ class Principal(QMainWindow):
         fecha1 = fechaactual.toString('dd/MM/yyyy')
         fecha2 = '{} {}'.format(fecha1, tiempo)
         self.ui.lbl_hist_pac_date1.setText(fecha2)
-
     # endregion
     # region sobreescribir evento de presionar enter
     def keyPressEvent(self, event):
@@ -3608,7 +3355,6 @@ class Principal(QMainWindow):
             if wfocus ==self.ui.btn_log_iniciar:
                 self.Verifica()
         QMainWindow.keyPressEvent(self, event)
-
     # endregion
     # region Validacion de entradas con expresiones regulares
     def Validar_valores_intro(self):
@@ -3643,7 +3389,6 @@ class Principal(QMainWindow):
         # --------------------------------------------------------------------------------------------------
         # aplicando las validaciones
         self.Validar_entrada(valida, valida1, valida2, valida3, valida4, valida5,valida6)
-
     # endregion
     # region Validar entrada de datos
     def Validar_entrada(self, valida, valida1, valida2, valida3, valida4, valida5,valida6):
