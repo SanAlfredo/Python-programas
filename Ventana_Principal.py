@@ -890,8 +890,8 @@ class Principal(QMainWindow):
     def Verifica_ci_tel_Progenitor(self,datos):
         global bbdd_carnet_padre
         global bbdd_carnet_madre
-        global tel_padre_bd
-        global tel_madre_bd
+        global bbdd_tel1
+        global bbdd_tel2
         ci=datos[0]
         tel=datos[2]
         if datos[5]==1:
@@ -899,20 +899,20 @@ class Principal(QMainWindow):
                 e = 0
             else:
                 e = 1
-            if not tel_padre_bd:
+            if not bbdd_tel1:
                 f=0
             else:
-                tel1=tel_padre_bd
+                tel1=bbdd_tel1
                 f=1
         else:
             if not bbdd_carnet_madre:
                 e = 0
             else:
                 e = 1
-            if not tel_madre_bd:
+            if not bbdd_tel2:
                 f=0
             else:
-                tel1=tel_madre_bd
+                tel1=bbdd_tel2
                 f=1
         if ci:
             if e == 0:
@@ -3923,6 +3923,7 @@ class Principal(QMainWindow):
                                         self.Registro_tabla_historial(enviar_datos)
                                         # endregion
                                         bbdd_tel1=resp6[1]
+                                        print(bbdd_tel1)
                                         self.ui.txt_reg_pac_tel1.setText(str(resp6[1]))
                                     else:
                                         bbdd_tel1=""
