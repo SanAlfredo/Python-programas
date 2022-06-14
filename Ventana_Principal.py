@@ -55,7 +55,7 @@ class Principal(QMainWindow):
         QMainWindow.__init__(self)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        #self.showMaximized()
+        self.showMaximized()
         # iniciar los stack widget en 0 para no tener sorpresas
         self.Iniciar_cero()
         # --------------------------------------------------------------------------------------------------
@@ -467,6 +467,8 @@ class Principal(QMainWindow):
                                                          "Son campos obligatorios\n")
         elif (ci_pac and ex_ci_pac==0) or (ci_padre and ex_ci_padre==0) or (ci_madre and ex_ci_madre==0):
             QMessageBox.critical(self,"Mensaje de error","No se olvide elegir una extensión para el número de carnet")
+        elif (not ci_pac and ex_ci_pac!=0) or (not ci_padre and ex_ci_padre!=0) or (not ci_madre and ex_ci_madre!=0):
+            QMessageBox.critical(self,"Mensaje de error","No es posible guardar una extensión de carnet sin el número")
         elif not nom_padre and not nom_madre and not ap1_padre and not ap2_padre and not ap1_madre and not ap2_madre:
             QMessageBox.critical(self,"Mensaje de error","Al menos uno de los padres debe ser registrado")
         elif (nom_padre and not ap1_padre and not ap2_padre) or (nom_madre and not ap1_madre and not ap2_madre) or (not ap1_pac and not ap2_pac):
@@ -973,7 +975,7 @@ class Principal(QMainWindow):
         else:
             self.Verifica_ci_tel_Progenitor(enviar)
     #endregion
-    # ******************************* CONTIENE TODAS LAS VERIFICACIONES
+    #region ******************* CONTIENE TODAS LAS VERIFICACIONES DE PACIENTE
     def Verificar1(self,datos):
         global bbdd_paciente
         global bbdd_carnet_pac
@@ -1154,6 +1156,7 @@ class Principal(QMainWindow):
             self.Verificar4(datos)
         else:
             self.Verificar4(datos)
+    #endregion
     #region Guardar el formulario de la consulta en la bbdd
     def Guardar_consulta(self):
         global matricula_user
@@ -1161,10 +1164,10 @@ class Principal(QMainWindow):
         if self.ui.tab_fecha_hora.currentIndex() == 0:
             fecha = datetime.datetime.today()
         if self.ui.tab_fecha_hora.currentIndex() == 1:
-            fecha = self.ui.spin_hist_pac_date.date()
-            fecha=fecha.toPyDate()
-            fecha=fecha.strftime('%Y-%m-%d')
-            fecha=datetime.datetime.strptime(fecha,'%Y-%m-%d')
+            fecha = self.ui.spin_hist_pac_date.dateTime()
+            fecha=fecha.toPyDateTime()
+            fecha=fecha.strftime('%Y-%m-%d %H:%M')
+            fecha=datetime.datetime.strptime(fecha,'%Y-%m-%d %H:%M')
         combo=self.ui.cb_hist_pac_consul.currentIndex()
         peso=self.ui.txt_hist_pac_pes.text()
         tall=self.ui.txt_hist_pac_tall.text()
@@ -1398,7 +1401,6 @@ class Principal(QMainWindow):
         global persona
         global usuario1
         global medico
-        global resultado_bbdd_usuario
         fecha2 = datetime.datetime.today()
         #tabla carnet debe ir llena, todos los campos son obligatorios
         carnet=[self.ui.txt_reg_user_CI.text(),self.ui.cb_reg_user_CI.currentIndex()]
@@ -1502,7 +1504,6 @@ class Principal(QMainWindow):
                                         QMessageBox.critical(self,"Mensaje de error","Ha ocurrido un error y no se pudo guardar los datos de validación")
                                 else:
                                     QMessageBox.critical(self, "Mensaje de error", "Ha ocurrido un error y no se pudo guardar los datos personales")
-
                             else:
                                 QMessageBox.critical(self,"Mensaje de error","Ha ocurrido un error y no se pudo verificar el ID de la persona")
                         else:
@@ -1516,7 +1517,6 @@ class Principal(QMainWindow):
                 self.Verificar_user_5(carnet)
                 carnet = []
                 usuario1 = []
-
     #endregion
     #region Modificación de datos de usuario
     def Verificar_user_1(self):
@@ -2683,7 +2683,7 @@ class Principal(QMainWindow):
                                              "	border:1px solid #ffffff;\n"
                                              "	border-radius:8px;\n"
                                              "}\n"
-                                             "QPushButton:hover{\n"
+                                             "QPushButton:hover,QPushButton:focus{\n"
                                              "	background:#5b004d;\n"
                                              "	border-radius:15px;\n"
                                              "}")
@@ -2843,7 +2843,7 @@ class Principal(QMainWindow):
                                              "	border:1px solid #55ff00;\n"
                                              "	border-radius:8px;\n"
                                              "}\n"
-                                             "QPushButton:hover{\n"
+                                             "QPushButton:hover,QPushButton:focus{\n"
                                              "	background:#131071;\n"
                                              "	border-radius:15px;\n"
                                              "}")
@@ -3002,7 +3002,7 @@ class Principal(QMainWindow):
                                              "	border:1px solid #ffff00;\n"
                                              "	border-radius:8px;\n"
                                              "}\n"
-                                             "QPushButton:hover{\n"
+                                             "QPushButton:hover,QPushButton:focus{\n"
                                              "	background:#862d00;\n"
                                              "	border-radius:15px;\n"
                                              "}")
@@ -3161,7 +3161,7 @@ class Principal(QMainWindow):
                                              "	border:1px solid #000000;\n"
                                              "	border-radius:8px;\n"
                                              "}\n"
-                                             "QPushButton:hover{\n"
+                                             "QPushButton:hover,QPushButton:focus{\n"
                                              "	background:#ff9500;\n"
                                              "	border-radius:15px;\n"
                                              "}")
@@ -3320,7 +3320,7 @@ class Principal(QMainWindow):
                                              "	border:1px solid #000000;\n"
                                              "	border-radius:8px;\n"
                                              "}\n"
-                                             "QPushButton:hover{\n"
+                                             "QPushButton:hover,QPushButton:focus{\n"
                                              "	background:#e7e7e7;\n"
                                              "	border-radius:15px;\n"
                                              "}")
