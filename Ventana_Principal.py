@@ -596,7 +596,7 @@ class Principal(QMainWindow):
                                             enviar=antecedentes,alergias,id_paciente
                                             self.Registrar_ante_pac(2,enviar)
                                         if nom_padre:
-                                            enviar = nom_padre, ap1_padre, ap2_padre, ci_padre, ex_ci_padre, tel_padre, id_paciente,1
+                                            enviar = nom_padre, ap1_padre, ap2_padre, ci_padre, ex_ci_padre, tel_padre, id_paciente, 1
                                             self.Registrar_Progenitor(3,enviar)
                                         if nom_madre:
                                             enviar = nom_madre, ap1_madre, ap2_madre, ci_madre, ex_ci_madre, tel_madre, id_paciente, 2
@@ -823,12 +823,12 @@ class Principal(QMainWindow):
             self.Registro_tabla_historial(enviar_datos)
             # endregion
             id_persona = ""
-            persona = [id_persona, nom, ap1, ap2, id_fecha, 1]
+            persona = [id_persona, nom, ap1, ap2, id_fecha, sexo_progenitor]
             id_persona = self.Creador_id()
             resp9 = self.Verifica_id_crea_id(1, id_persona)
             if resp9[0] == 1:
                 id_persona = resp9[1]
-                persona = [id_persona, nom, ap1, ap2, id_fecha, 1]
+                persona = [id_persona, nom, ap1, ap2, id_fecha, sexo_progenitor]
                 tabla = "persona"
                 columnas = "id_persona, nombre, apellido1, apellido2, fecha, tipo_sexo"
                 resp10 = self.Insertar_bbdd(tabla, columnas, persona)
@@ -849,7 +849,7 @@ class Principal(QMainWindow):
                     resp12 = self.Verifica_id_crea_id(3, id_familiar)
                     if resp12[0] == 1:
                         id_familiar = resp12[1]
-                        familiar = [id_familiar, id_persona, 1, cod_pac]
+                        familiar = [id_familiar, id_persona, sexo_progenitor, cod_pac]
                         tabla = "familiar"
                         columnas = "id_familiar, id_persona, tipo_familiar, paciente"
                         resp13 = self.Insertar_bbdd(tabla, columnas, familiar)
@@ -864,10 +864,7 @@ class Principal(QMainWindow):
                                 if caso==2:
                                     enviar=datos[29],id_familiar,2
                                 if caso==3:
-                                    if datos[7]==1:
-                                        enviar=datos[5],id_familiar,1
-                                    else:
-                                        enviar=datos[5],id_familiar,2
+                                    enviar=datos[5],id_familiar,sexo_progenitor
                                 self.Registrar_tel(enviar)
                         else:
                             QMessageBox.critical(self, "Mensaje de error", "No se pudo registrar al familiar")
@@ -4993,19 +4990,32 @@ class Principal(QMainWindow):
                 password=contra
             )
             cursor=conn.cursor()
-            if caso==1:
-                cursor.execute('SELECT * FROM id_maximo_persona(%s)',(id_persona,))
-            if caso==2:
-                cursor.execute('SELECT * FROM id_maximo_paciente(%s)',(id_persona,))
-            if caso==3:
-                cursor.execute('SELECT * FROM id_maximo_familiar(%s)',(id_persona,))
-            if caso==4:
-                cursor.execute('SELECT * FROM id_maximo_consulta(%s)',(id_persona,))
-            resultado=cursor.fetchone()[0]
-            if resultado==None:
-                id_nuevo=id_persona+"-1"
+            buscado = id_persona + "%"
+            if caso == 1:
+                query = sql.SQL("select all id_persona from persona where id_persona like {buscado1}").format(
+                    buscado1=sql.Placeholder()
+                )
+            if caso == 2:
+                query = sql.SQL("select all id_paciente from paciente where id_paciente like {buscado1}").format(
+                    buscado1=sql.Placeholder()
+                )
+            if caso == 3:
+                query = sql.SQL("select all id_familiar from familiar where id_familiar like {buscado1}").format(
+                    buscado1=sql.Placeholder()
+                )
+            if caso == 4:
+                query = sql.SQL("select all id_consulta from consulta where id_consulta like {buscado1}").format(
+                    buscado1=sql.Placeholder()
+                )
+            cursor.execute(query, (buscado,))
+            resultado = cursor.fetchall()
+            if not resultado:
+                id_nuevo = id_persona + "-1"
             else:
-                id_nuevo=self.Nuevo_codigo(resultado)
+                n = len(resultado)
+                id_nuevo = resultado[n - 1]
+                id_nuevo = id_nuevo[0]
+                id_nuevo=self.Nuevo_codigo(id_nuevo)
             resp=1
         except:
             resp=0
