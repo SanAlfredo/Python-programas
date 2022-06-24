@@ -991,7 +991,9 @@ class Principal(QMainWindow):
             a = 0
         else:
             a = 1
-        if datos[12] or datos[13]:
+        if not datos[12] and not datos[13]:
+            r=0
+        else:
             r=1
         if not bbdd_antec_pac:
             b = 0
@@ -3830,10 +3832,13 @@ class Principal(QMainWindow):
                             enviar_datos = 9, str(codigo_paciente), 3, "antecedentes"
                             self.Registro_tabla_historial(enviar_datos)
                             # endregion
-                            datos = resp1[1]
-                            bbdd_antec_pac=datos
-                            self.ui.pt_reg_pac_ap.setPlainText(datos[1])
-                            self.ui.pt_reg_pac_alerg.setPlainText(datos[2])
+                            if resp1[1]!=None:
+                                datos = resp1[1]
+                                bbdd_antec_pac=datos
+                                self.ui.pt_reg_pac_ap.setPlainText(datos[1])
+                                self.ui.pt_reg_pac_alerg.setPlainText(datos[2])
+                            else:
+                                bbdd_antec_pac = []
                         else:
                             bbdd_antec_pac=[]
                         resp2 = self.Buscar_datos_paciente(3, codigo_paciente)
@@ -4133,9 +4138,13 @@ class Principal(QMainWindow):
                             enviar_datos = 9, str(codigo_paciente1), 3, "antecedentes"
                             self.Registro_tabla_historial(enviar_datos)
                             # endregion
-                            datos = resp1[1]
-                            antecedentes = datos[1]
-                            alergias = datos[2]
+                            if resp1[1]!=None:
+                                datos = resp1[1]
+                                antecedentes = datos[1]
+                                alergias = datos[2]
+                            else:
+                                antecedentes = "No tiene antecedentes patológicos"
+                                alergias = "No posee alergias"
                         else:
                             antecedentes = "No tiene antecedentes patológicos"
                             alergias = "No posee alergias"
